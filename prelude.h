@@ -13,7 +13,10 @@
 #include <ctype.h>
 #include <string.h>
 
+// Array size
 #define ASZ(A) sizeof(A) / sizeof(A[0])
+// 2-d array access
+#define AT(X, Y, W) ((Y) * (W) + (X))
 
 // clang-format off
 typedef size_t        usize;
@@ -33,7 +36,23 @@ typedef int32_t  i32;
 typedef int64_t  i64;
 // clang-format on
 
-int solve(const char *data);
+// __LINE__ does not get recursively expanded when part of stringizing # or
+// token-pasting ##, so we have to add indirection
+#define CONCAT_(prefix, suffix) prefix##suffix
+#define CONCAT(prefix, suffix) CONCAT_(prefix, suffix)
+// Mangle the variable token so that it is unlikely to clash with another
+// identifier
+#define MANGLE(name) CONCAT(CONCAT(name##__, __LINE__), __)
+#define UNIQ(name) MANGLE(name)
+
+#define for_each_token(S, T, SEP)                                                                  \
+	for (char *UNIQ(brk), *T = strtok_r((S), (SEP), &UNIQ(brk)); T;                            \
+	     T = strtok_r(NULL, (SEP), &UNIQ(brk)))
+
+#define for_each_line(S, L) for_each_token(S, L, "\n")
+#define for_each_word(S, W) for_each_token(S, W, " ")
+
+int solve(char *data);
 
 char *read_to_string(const char *restrict fname);
 char *read_to_string(const char *restrict fname) {
@@ -69,13 +88,10 @@ char *read_to_string(const char *restrict fname) {
 	size_t bytes_read = fread(content, 1, bytes_to_read, file);
 	if (bytes_read != bytes_to_read) {
 		if (feof(file))
-			fprintf(stderr,
-			        "Expected to read %zu bytes, but read %zu\n",
-			        bytes_to_read, bytes_read);
+			fprintf(stderr, "Expected to read %zu bytes, but read %zu\n", bytes_to_read,
+			        bytes_read);
 
-		if (ferror(file))
-			fprintf(stderr, "Could not read all bytes from %s\n",
-			        fname);
+		if (ferror(file)) fprintf(stderr, "Could not read all bytes from %s\n", fname);
 
 		free(content);
 		return NULL;
