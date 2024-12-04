@@ -19,12 +19,10 @@ int solve(char *data) {
 	int a[N], b[N];
 	usize n = 0;
 
-	for (const char *s = data; n < N; n++) {
-		int cnt = sscanf(s, "%d %d", &a[n], &b[n]);
-		if (cnt != 2) break;
-		s = strchr(s, '\n');
-		if (!s) break;
-		s++;
+	for_each_line(data, line) {
+		int cnt = sscanf(line, "%d %d", &a[n], &b[n]);
+		assert(cnt == 2 && "Expect two fields");
+		n++;
 	}
 	printf("N: %zu\n", n);
 

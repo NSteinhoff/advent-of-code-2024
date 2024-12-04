@@ -7,35 +7,17 @@
 static const int expected = 9;
 const char *w = "MAS";
 
-// clockwise
-typedef enum {
-	NE,
-	SE,
-	SW,
-	NW,
-	NUM_DIRECTIONS,
-} Direction;
-
 #define C(X, Y, W) ((Y) * (W + 1) + (X))
 
-static bool search(const char *data, usize x, usize y, usize n, Direction d) {
-	printf("Direction: %s\n", d == NE   ? "NE"
-	                          : d == SE ? "SE"
-	                          : d == SW ? "SW"
-	                                    : "NW");
+static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
+	int dx = (*dir)[0];
+	int dy = (*dir)[1];
 
 	for (int i = -1; i <= 1; i++) {
-		int xx = d == NE || d == SE ? (int)x + (int)i : (int)x - (int)i;
-		int yy = d == NE || d == NW ? (int)y - (int)i : (int)y + (int)i;
-
-		if (xx < 0 || xx >= (int)n || yy < 0 || yy >= (int)n)
-			return false;
-
+		int xx = (int)x + dx * (int)i;
+		int yy = (int)y + dy * (int)i;
 		char c = data[C((usize)xx, (usize)yy, n)];
-		printf("%d,%d = %c\n", xx, yy, c);
-		if (c != w[i+1]) {
-			return false;
-		}
+		if (c != w[i + 1]) return false;
 	}
 
 	return true;
@@ -47,16 +29,25 @@ int solve(char *data) {
 	usize n = strcspn(data, "\n");
 	printf("%zu x %zu\n", n, n);
 
-	// Find the 'X'
-	for (usize y = 0; y < n; y++) {
-		for (usize x = 0; x < n; x++) {
-			if (data[C(x, y, n)] != 'A') continue;
-			printf("Search @ %zu,%zu\n", x, y);
+	// clang-format off
+	int directions[][2] = {
+		{ 1, -1},
+		{ 1,  1},
+		{-1,  1},
+		{-1, -1},
+	};
+	// clang-format on
 
-			// Run search in all 4 X directions
+	// Find the 'A'
+	for (usize y = 1; y < n - 1; y++) {
+		for (usize x = 1; x < n - 1; x++) {
+			if (data[C(x, y, n)] != 'A') continue;
+
+			// Run search in the 4 diagonals
 			usize num = 0;
-			for (Direction d = NE; d < NUM_DIRECTIONS; d++) {
-				if (search(data, x, y, n, d)) num++;
+			for (usize i = 0; i < ASZ(directions); i++) {
+				if (search(data, x, y, n, &directions[i]))
+					num++;
 			}
 			if (num == 2) result++;
 		}

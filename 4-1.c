@@ -7,49 +7,23 @@
 static const int expected = 18;
 static const char *w = "XMAS";
 
-// clockwise
-typedef enum {
-	N,
-	E,
-	S,
-	W,
-	NE,
-	SE,
-	SW,
-	NW,
-	NUM_DIRECTIONS,
-} Direction;
-
 #define C(X, Y, W) ((Y) * (W + 1) + (X))
 
-static bool search(const char *data, usize x, usize y, usize n, Direction d) {
+static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
 	usize len = strlen(w);
-
-	printf("Direction: %s\n", d == N    ? "N"
-	                          : d == NE ? "NE"
-	                          : d == E  ? "E"
-	                          : d == SE ? "SE"
-	                          : d == S  ? "S"
-	                          : d == SW ? "SW"
-	                          : d == W  ? "W"
-	                                    : "NW");
+	int dx = (*dir)[0];
+	int dy = (*dir)[1];
 
 	for (usize i = 1; i < len; i++) {
-		int xx = d == N || d == S             ? (int)x
-		       : d == NE || d == E || d == SE ? (int)x + (int)i
-		                                      : (int)x - (int)i;
-		int yy = d == E || d == W             ? (int)y
-		       : d == N || d == NE || d == NW ? (int)y - (int)i
-		                                      : (int)y + (int)i;
+		int xx = (int)x + dx * (int)i;
+		int yy = (int)y + dy * (int)i;
 
 		if (xx < 0 || xx >= (int)n || yy < 0 || yy >= (int)n)
 			return false;
 
 		char c = data[C((usize)xx, (usize)yy, n)];
-		printf("%d,%d = %c\n", xx, yy, c);
-		if (c != w[i]) {
-			return false;
-		}
+
+		if (c != w[i]) return false;
 	}
 
 	return true;
@@ -61,15 +35,28 @@ int solve(char *data) {
 	usize n = strcspn(data, "\n");
 	printf("%zu x %zu\n", n, n);
 
+	// clang-format off
+	int directions[][2] = {
+		{ 0, -1},
+		{ 1, -1},
+		{ 1,  0},
+		{ 1,  1},
+		{ 0,  1},
+		{-1,  1},
+		{-1,  0},
+		{-1, -1},
+	};
+	// clang-format on
+
 	// Find the 'X'
 	for (usize y = 0; y < n; y++) {
 		for (usize x = 0; x < n; x++) {
 			if (data[C(x, y, n)] != 'X') continue;
-			printf("Search @ %zu,%zu\n", x, y);
 
 			// Run search in all 8 directions
-			for (Direction d = N; d < NUM_DIRECTIONS; d++) {
-				if (search(data, x, y, n, d)) result++;
+			for (usize i = 0; i < ASZ(directions); i++) {
+				if (search(data, x, y, n, &directions[i]))
+					result++;
 			}
 		}
 	}

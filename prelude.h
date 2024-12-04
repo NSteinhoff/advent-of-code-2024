@@ -45,8 +45,8 @@ typedef int64_t  i64;
 #define MANGLE(name) CONCAT(CONCAT(name##__, __LINE__), __)
 #define UNIQ(name) MANGLE(name)
 
-#define for_each_token(S, T, SEP)                                                                  \
-	for (char *UNIQ(brk), *T = strtok_r((S), (SEP), &UNIQ(brk)); T;                            \
+#define for_each_token(S, T, SEP)                                              \
+	for (char *UNIQ(brk), *T = strtok_r((S), (SEP), &UNIQ(brk)); T;        \
 	     T = strtok_r(NULL, (SEP), &UNIQ(brk)))
 
 #define for_each_line(S, L) for_each_token(S, L, "\n")
@@ -72,7 +72,7 @@ char *read_to_string(const char *restrict fname) {
 		perror("Cannot get position in file");
 		return NULL;
 	}
-	size_t bytes_to_read = (size_t)bytes;
+	usize bytes_to_read = (usize)bytes;
 
 	if (fseek(file, 0L, SEEK_SET)) {
 		perror("Cannot rewind file");
@@ -85,13 +85,16 @@ char *read_to_string(const char *restrict fname) {
 		return NULL;
 	}
 
-	size_t bytes_read = fread(content, 1, bytes_to_read, file);
+	usize bytes_read = fread(content, 1, bytes_to_read, file);
 	if (bytes_read != bytes_to_read) {
 		if (feof(file))
-			fprintf(stderr, "Expected to read %zu bytes, but read %zu\n", bytes_to_read,
-			        bytes_read);
+			fprintf(stderr,
+			        "Expected to read %zu bytes, but read %zu\n",
+			        bytes_to_read, bytes_read);
 
-		if (ferror(file)) fprintf(stderr, "Could not read all bytes from %s\n", fname);
+		if (ferror(file))
+			fprintf(stderr, "Could not read all bytes from %s\n",
+			        fname);
 
 		free(content);
 		return NULL;
