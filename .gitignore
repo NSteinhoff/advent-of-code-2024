@@ -1,2 +1,5 @@
 # Debugging
 *.dSYM/
+
+# Binaries
+create-new-day

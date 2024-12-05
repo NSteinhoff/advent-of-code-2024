@@ -1,7 +1,17 @@
 .PHONY: help list clean
 
-CC 	:= clang
-CFLAGS 	:= $(CFLAGS) -g
+CC         := clang
+CFLAGS     := $(CFLAGS) -g
+COMPILE.c  := $(CC) $(CFLAGS)
+CHECK.c    := $(COMPILE.c) -fsyntax-only
+
+SRC_C := $(wildcard *.c)
+
+all: create-new-day check-c
+
+check-c:
+	@for f in $(wildcard *.c); do $(CHECK.c) -o "$${f%%.c}" "$${f}"; done
+.PHONY: check-c
 
 help:
 	@echo
@@ -26,6 +36,7 @@ list:
 clean:
 	@rm -rf rs/target
 	@rm -rf *.dSYM
+	@rm -f create-new-day
 	@find -E . -regex './[0-9]+(-[0-9])?' -delete
 
 py_%: %.py
@@ -48,4 +59,7 @@ ts_%: %.ts
 	@ts-node $<
 
 %: %.c
+	@$(CC) $(CFLAGS) $< -o $@
+
+create-new-day: create-new-day.c
 	@$(CC) $(CFLAGS) $< -o $@
