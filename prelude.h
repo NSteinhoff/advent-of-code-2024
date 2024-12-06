@@ -14,7 +14,7 @@
 #include <string.h>
 
 // Array size
-#define ASZ(A) sizeof(A) / sizeof(A[0])
+#define ASZ(A) (sizeof(A) / sizeof(A[0]))
 // 2-d array access
 #define AT(X, Y, W) ((Y) * (W) + (X))
 
