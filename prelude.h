@@ -17,6 +17,8 @@
 #define ASZ(A) (sizeof(A) / sizeof(A[0]))
 // 2-d array access
 #define AT(X, Y, W) ((Y) * (W) + (X))
+// 2-d string access with newlines as row separators
+#define ATS(X, Y, W) ((Y) * (W + 1) + (X))
 
 // clang-format off
 typedef size_t        usize;

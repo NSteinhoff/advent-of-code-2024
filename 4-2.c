@@ -7,8 +7,6 @@
 static const i64 expected = 9;
 const char *w = "MAS";
 
-#define C(X, Y, W) ((Y) * (W + 1) + (X))
-
 static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
 	int dx = (*dir)[0];
 	int dy = (*dir)[1];
@@ -16,7 +14,7 @@ static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
 	for (int i = -1; i <= 1; i++) {
 		int xx = (int)x + dx * (int)i;
 		int yy = (int)y + dy * (int)i;
-		char c = data[C((usize)xx, (usize)yy, n)];
+		char c = data[ATS((usize)xx, (usize)yy, n)];
 		if (c != w[i + 1]) return false;
 	}
 
@@ -41,7 +39,7 @@ i64 solve(char *data) {
 	// Find the 'A'
 	for (usize y = 1; y < n - 1; y++) {
 		for (usize x = 1; x < n - 1; x++) {
-			if (data[C(x, y, n)] != 'A') continue;
+			if (data[ATS(x, y, n)] != 'A') continue;
 
 			// Run search in the 4 diagonals
 			usize num = 0;
@@ -63,6 +61,6 @@ int main(void) {
 		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
+	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

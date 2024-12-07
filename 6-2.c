@@ -7,7 +7,7 @@
 static const i64 expected = 6;
 
 #define N 130
-// [x,  y]
+
 struct {
 	int x, y;
 } steps[4] = {
@@ -22,6 +22,17 @@ enum {
 	BLOCKED = 1 << ASZ(steps),
 	VISITED = BLOCKED << 1,
 };
+
+// Bitmask:
+//     [8,7,6,5,4,3,2,1] -> EMPTY
+//      ^ ^ ^ ^ ^ ^ ^ ^ --> N
+//      | | | | | | + ----> E
+//      | | | | | + ------> S
+//      | | | | + --------> W
+//      | | | + ----------> BLOCKED
+//      | | + ------------> VISITED
+//      | + --------------> ?
+//      + ----------------> ?
 
 #define VISIT(x) (x |= VISITED)
 #define IS_VISITED(x) (x & VISITED)
@@ -121,6 +132,6 @@ int main(void) {
 		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
+	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

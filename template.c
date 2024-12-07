@@ -20,7 +20,7 @@ int main(void) {
 		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
+	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }
 
