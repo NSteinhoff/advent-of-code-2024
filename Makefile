@@ -2,6 +2,8 @@
 
 CC         := clang
 CFLAGS     := $(CFLAGS) -g
+CFLAGS     += -Wall -Wextra
+CFLAGS     += -Wconversion -Wmissing-prototypes
 COMPILE.c  := $(CC) $(CFLAGS)
 CHECK.c    := $(COMPILE.c) -fsyntax-only
 

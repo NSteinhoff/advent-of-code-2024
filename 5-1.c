@@ -50,7 +50,7 @@ int solve(char *data) {
 
 int main(void) {
 	const int actual = solve(read_to_string(SAMPLE));
-	printf("Example: %d\n", actual);
+	printf("Sample: %d\n", actual);
 	if (actual != expected) {
 		printf("FAIL: expected %d actual %d\n", expected, actual);
 		return 1;
