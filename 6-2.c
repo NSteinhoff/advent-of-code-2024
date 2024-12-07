@@ -4,7 +4,7 @@
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-static const int expected = 6;
+static const i64 expected = 6;
 
 #define N 130
 // [x,  y]
@@ -75,9 +75,9 @@ static int block(u8 m[N][N], usize bx, usize by, uchar d, int x, int y) {
 	return 0;
 }
 
-int solve(char *data) {
+i64 solve(char *data) {
 	assert(data && "We need data!");
-	int result = 0;
+	i64 result = 0;
 
 	memset(map_start, 0, sizeof map_start);
 	n = strcspn(data, "\n");
@@ -115,12 +115,12 @@ int solve(char *data) {
 }
 
 int main(void) {
-	const int actual = solve(read_to_string(SAMPLE));
-	printf("Sample: %d\n", actual);
+	const i64 actual = solve(read_to_string(SAMPLE));
+	printf("Sample: %lld\n", actual);
 	if (actual != expected) {
-		printf("FAIL: expected %d actual %d\n", expected, actual);
+		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Result: %d\n", solve(read_to_string(INPUT)));
+	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

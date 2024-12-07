@@ -4,7 +4,7 @@
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-static const int expected = 9;
+static const i64 expected = 9;
 const char *w = "MAS";
 
 #define C(X, Y, W) ((Y) * (W + 1) + (X))
@@ -23,9 +23,9 @@ static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
 	return true;
 }
 
-int solve(char *data) {
+i64 solve(char *data) {
 	assert(data && "We need data!");
-	int result = 0;
+	i64 result = 0;
 	usize n = strcspn(data, "\n");
 	printf("%zu x %zu\n", n, n);
 
@@ -57,12 +57,12 @@ int solve(char *data) {
 }
 
 int main(void) {
-	const int actual = solve(read_to_string(SAMPLE));
-	printf("Sample: %d\n", actual);
+	const i64 actual = solve(read_to_string(SAMPLE));
+	printf("Sample: %lld\n", actual);
 	if (actual != expected) {
-		printf("FAIL: expected %d actual %d\n", expected, actual);
+		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Result: %d\n", solve(read_to_string(INPUT)));
+	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

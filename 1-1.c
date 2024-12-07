@@ -4,7 +4,7 @@
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-const int expected = 11;
+const i64 expected = 11;
 
 #define N 1000
 
@@ -15,7 +15,7 @@ static int compar(const void *x, const void *y) {
 	return *a - *b;
 }
 
-int solve(char *data) {
+i64 solve(char *data) {
 	int a[N], b[N];
 	usize n = 0;
 
@@ -36,12 +36,12 @@ int solve(char *data) {
 }
 
 int main(void) {
-	const int actual = solve(read_to_string(SAMPLE));
-	printf("Sample: %d\n", actual);
+	const i64 actual = solve(read_to_string(SAMPLE));
+	printf("Sample: %lld\n", actual);
 	if (actual != expected) {
-		printf("FAIL: expected %d actual %d\n", expected, actual);
+		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Result: %d\n", solve(read_to_string(INPUT)));
+	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

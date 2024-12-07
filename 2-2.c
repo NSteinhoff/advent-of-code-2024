@@ -4,7 +4,7 @@
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-const int expected = 4;
+const i64 expected = 4;
 
 #define MAX_VALUES 16
 
@@ -29,9 +29,9 @@ static bool safeskip(usize size, int xs[size], usize skip) {
 	return safe(n, ys);
 }
 
-int solve(char *data) {
+i64 solve(char *data) {
 	assert(data && "We need data!");
-	int result = 0;
+	i64 result = 0;
 	for_each_line(data, line) {
 		printf("%s ", line);
 		usize n = 0;
@@ -49,12 +49,12 @@ int solve(char *data) {
 }
 
 int main(void) {
-	const int actual = solve(read_to_string(SAMPLE));
-	printf("Sample: %d\n", actual);
+	const i64 actual = solve(read_to_string(SAMPLE));
+	printf("Sample: %lld\n", actual);
 	if (actual != expected) {
-		printf("FAIL: expected %d actual %d\n", expected, actual);
+		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Result: %d\n", solve(read_to_string(INPUT)));
+	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

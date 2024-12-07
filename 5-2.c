@@ -6,7 +6,7 @@
 
 #define N 100
 
-static const int expected = 123;
+static const i64 expected = 123;
 
 static int rules[N][N] = {0};
 static usize num[N] = {0};
@@ -23,9 +23,9 @@ static int cmp(const void *left, const void *right) {
 	return 0;
 }
 
-int solve(char *data) {
+i64 solve(char *data) {
 	assert(data && "We need data!");
-	int result = 0;
+	i64 result = 0;
 	memset(rules, 0, sizeof rules);
 	memset(num, 0, sizeof num);
 
@@ -64,12 +64,12 @@ int solve(char *data) {
 }
 
 int main(void) {
-	const int actual = solve(read_to_string(SAMPLE));
-	printf("Sample: %d\n", actual);
+	const i64 actual = solve(read_to_string(SAMPLE));
+	printf("Sample: %lld\n", actual);
 	if (actual != expected) {
-		printf("FAIL: expected %d actual %d\n", expected, actual);
+		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Result: %d\n", solve(read_to_string(INPUT)));
+	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

@@ -4,11 +4,11 @@
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-const int expected = 161;
+const i64 expected = 161;
 
-int solve(char *data) {
+i64 solve(char *data) {
 	assert(data && "We need data!");
-	int result = 0;
+	i64 result = 0;
 	usize n = strlen(data);
 	for (usize i = 0; i < n; i++) {
 		if (strncmp(data + i, "mul(", 4)) continue;
@@ -32,12 +32,12 @@ int solve(char *data) {
 }
 
 int main(void) {
-	const int actual = solve(read_to_string(SAMPLE));
-	printf("Sample: %d\n", actual);
+	const i64 actual = solve(read_to_string(SAMPLE));
+	printf("Sample: %lld\n", actual);
 	if (actual != expected) {
-		printf("FAIL: expected %d actual %d\n", expected, actual);
+		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	printf("Result: %d\n", solve(read_to_string(INPUT)));
+	printf("Restult: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }

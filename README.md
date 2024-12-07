@@ -11,7 +11,7 @@ Some of the solutions are written in compiled languages, which need to be built
 before they can be run. A [**Makefile**][make] is available which provides a
 consistent interface for running examples.
 
-Run `make` to see the usage information.
+Run `make help` to see the usage information.
 
 [advent]: https://adventofcode.com/2024
 [make]: https://www.gnu.org/software/make/manual/make.html

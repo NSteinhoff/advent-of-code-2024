@@ -52,7 +52,7 @@ typedef int64_t  i64;
 #define for_each_line(S, L) for_each_token(S, L, "\n")
 #define for_each_word(S, W) for_each_token(S, W, " ")
 
-int solve(char *data);
+i64 solve(char *data);
 
 char *read_to_string(const char *restrict fname);
 char *read_to_string(const char *restrict fname) {
