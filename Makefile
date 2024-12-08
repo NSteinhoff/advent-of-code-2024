@@ -1,8 +1,8 @@
 .PHONY: help list clean
 
 CC         := clang
-CFLAGS     := $(CFLAGS) -g
-CFLAGS     += -Wall -Wextra
+CFLAGS     := $(CFLAGS) -g -std=c17
+CFLAGS     += -Wall -Wextra -pedantic
 CFLAGS     += -Wconversion -Wmissing-prototypes
 COMPILE.c  := $(CC) $(CFLAGS)
 CHECK.c    := $(COMPILE.c) -fsyntax-only
