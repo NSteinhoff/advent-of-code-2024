@@ -58,6 +58,9 @@ typedef double   f64;
 #define for_each_line(S, L) for_each_token(S, L, "\n")
 #define for_each_word(S, W) for_each_token(S, W, " ")
 
+#define for_in(I, A) for (usize I = 0; I < ASZ(A); I++)
+#define for_rg(I, N) for (usize I = 0; I < N; I++)
+
 i64 solve(char *data);
 
 char *read_to_string(const char *restrict fname);
