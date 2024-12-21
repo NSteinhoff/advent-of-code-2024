@@ -63,8 +63,7 @@ typedef double   f64;
 
 i64 solve(char *data);
 
-char *read_to_string(const char *restrict fname);
-char *read_to_string(const char *restrict fname) {
+static char *read_to_string(const char *restrict fname) {
 	FILE *file = fopen(fname, "r");
 	if (!file) {
 		perror(fname);

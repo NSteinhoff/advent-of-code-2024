@@ -1,3 +1,4 @@
+// clang-format off
 #include "prelude.h"
 
 #define DAY "{{DAY}}"
