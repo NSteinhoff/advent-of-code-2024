@@ -1,0 +1,31 @@
+Register A: 64854237
+Register B: 0
+Register C: 0
+
+Program: 2,4,1,1,7,5,1,5,4,0,5,5,0,3,3,0
+
+ 2,4 | 1,1 | 7,5 | 1,5 | 4,0 | 5,5 | 0,3 | 3,0
+00    02    04    06    08    10    12    14
+
+00: B <- A % 8    // B -> [0 - 7]
+02: B <- B ^ 1    // B toggle 1
+04: C <- A >> B
+06: B <- B ^ 5    // B toggle 4 and 1
+08: B <- B ^ C
+10: print B % 8
+12: A >> 3 (A // 8)
+14: if A -> BEGIN
+
+
+Register A: 2024
+Register B: 0
+Register C: 0
+
+Program: 0,3,5,4,3,0
+
+ 0,3 | 5,4 | 3,0
+00    02    04
+
+00: A <- A // 8
+02: print A
+04: if A -> BEGIN
