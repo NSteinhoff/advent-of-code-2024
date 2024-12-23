@@ -1,16 +1,16 @@
-// clang-format off
+// clang-format on
 #include "prelude.h"
 
-#define DAY "16"
-#define INPUT DAY ".txt"
-#define SAMPLE DAY "-s.txt"
+#define DAY     "16"
+#define INPUT   DAY ".txt"
+#define SAMPLE  DAY "-s.txt"
 #define SAMPLE2 DAY "-s2.txt"
 
-#define N 141
-#define M N
+#define N            141
+#define M            N
 #define MAX_GRID_LEN (M * N)
-#define MAX_QUEUE (MAX_GRID_LEN * 4)
-#define D 4
+#define MAX_QUEUE    (MAX_GRID_LEN * 4)
+#define D            4
 
 static const i64 expected = 7036;
 
@@ -21,36 +21,38 @@ typedef struct {
 
 // Location
 typedef struct {
-	P p;
+	P     p;
 	usize c, d;
 } L;
 
 // Grid
 typedef struct {
 	usize n, m;
-	P s, e;
-	char tiles[M][N];
-	bool visited[M][N][D];
+	P     s, e;
+	char  tiles[M][N];
+	bool  visited[M][N][D];
 } G;
 
 // Queue
 typedef struct {
-	L elems[MAX_QUEUE];
+	L     elems[MAX_QUEUE];
 	usize len;
 } Q;
 
 // Adjacencies
 typedef struct {
-	L ls[3];
+	L     ls[3];
 	usize len;
 } A;
 
 // Grid
+// clang-format off
 static inline void visit(G *g, const L *l) { g->visited[l->p.y][l->p.x][l->d] = true; }
 static inline bool visited(const G *g, const L *l) { return g->visited[l->p.y][l->p.x][l->d]; }
 static inline bool blocked(const G *g, P p) { return g->tiles[p.y][p.x] == '#'; }
-static inline L start(const G *g) { return (L){.p = g->s, .d = 1 /* East */}; }
+static inline L    start(const G *g) { return (L){.p = g->s, .d = 1 /* East */}; }
 static inline bool arrived(const G *g, P p) { return p.x == g->e.x && p.y == g->e.y; }
+// clang-format on
 
 static void draw(G *g) {
 	printf("G: [%3zu, %3zu]\n", g->n, g->m);
@@ -68,6 +70,7 @@ static void draw(G *g) {
 
 // Location
 static inline A adj(L l) {
+	// clang-format off
 	P dp = (P[D]){
 		{  0, -1 }, // N
 		{  1,  0 }, // E
@@ -84,6 +87,7 @@ static inline A adj(L l) {
 		},
 		.len = 3,
 	};
+	// clang-format on
 }
 
 static inline void show(const L *l) {

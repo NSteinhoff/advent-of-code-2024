@@ -1,18 +1,18 @@
-// clang-format off
+// clang-format on
 #include "prelude.h"
 
-#define DAY "16"
-#define INPUT DAY ".txt"
-#define SAMPLE DAY "-s.txt"
+#define DAY     "16"
+#define INPUT   DAY ".txt"
+#define SAMPLE  DAY "-s.txt"
 #define SAMPLE2 DAY "-s2.txt"
 
-#define N 141
-#define M N
-#define D 4
-#define BT 3
+#define N            141
+#define M            N
+#define D            4
+#define BT           3
 #define MAX_GRID_LEN (M * N)
-#define MAX_ELEMS (MAX_GRID_LEN * 4)
-#define MAX_COST SIZE_MAX
+#define MAX_ELEMS    (MAX_GRID_LEN * 4)
+#define MAX_COST     SIZE_MAX
 
 static const i64 expected = 45;
 
@@ -23,7 +23,7 @@ typedef struct {
 
 // Location
 typedef struct {
-	P p;
+	P     p;
 	usize c, d;
 } L;
 
@@ -31,15 +31,15 @@ typedef struct {
 typedef struct {
 	usize cost;
 	usize n;
-	L bt[BT];
+	L     bt[BT];
 } T;
 
 // Grid
 typedef struct {
 	usize n, m;
-	P s, e;
-	char tiles[M][N];
-	T tracks[M][N][D];
+	P     s, e;
+	char  tiles[M][N];
+	T     tracks[M][N][D];
 } G;
 
 // Queue
@@ -49,30 +49,32 @@ typedef struct {
 
 // Priority queue
 typedef struct {
-	K elems[MAX_ELEMS];
+	K     elems[MAX_ELEMS];
 	usize len;
 } Q;
 
 // Location stack
 typedef struct {
-	L elems[MAX_ELEMS];
+	L     elems[MAX_ELEMS];
 	usize len;
 } S;
 
 // Adjacencies
 typedef struct {
-	L ls[3];
+	L     ls[3];
 	usize len;
 } A;
 
 // Grid
+// clang-format off
 static inline void visit(G *g, const L *l) { g->tracks[l->p.y][l->p.x][l->d].cost = l->c; }
 static inline void travel(G *g, const L *l) { g->tiles[l->p.y][l->p.x] = 'O'; }
 static inline bool visited(const G *g, const L *l) { return g->tracks[l->p.y][l->p.x][l->d].cost < l->c; }
 static inline bool blocked(const G *g, P p) { return g->tiles[p.y][p.x] == '#'; }
-static inline L start(const G *g) { return (L){.p = g->s, .d = 1 /* East */}; }
+static inline L    start(const G *g) { return (L){.p = g->s, .d = 1 /* East */}; }
 static inline bool arrived(const G *g, P p) { return p.x == g->e.x && p.y == g->e.y; }
-static inline T *tracks_to(G *g, const L *l) { return &g->tracks[l->p.y][l->p.x][l->d]; }
+static inline T   *tracks_to(G *g, const L *l) { return &g->tracks[l->p.y][l->p.x][l->d]; }
+// clang-format on
 
 static inline void track(G *g, const K *k) {
 	if (!k->from.p.x && !k->from.p.y) return;
@@ -80,11 +82,13 @@ static inline void track(G *g, const K *k) {
 
 	for (usize i = 0; i < ts->n; i++) {
 		L l = ts->bt[i];
+		// clang-format off
 		if(l.p.x == k->from.p.x &&
 		   l.p.y == k->from.p.y &&
 		   l.d   == k->from.d   &&
 		   l.c   == k->from.c)
 			return;
+		// clang-format on
 	}
 
 	ts->bt[ts->n++] = k->from;
@@ -106,6 +110,7 @@ static void draw(G *g) {
 
 // Location
 static inline A adj(L l) {
+	// clang-format off
 	static P dirs[D] = {
 		{  0, -1 }, // N
 		{  1,  0 }, // E
@@ -124,6 +129,7 @@ static inline A adj(L l) {
 		},
 		.len = 3,
 	};
+	// clang-format on
 }
 
 // Heap
@@ -188,7 +194,8 @@ i64 solve(char *data) {
 			if (c == 'S') g.s.x = (int)x, g.s.y = (int)y;
 			if (c == 'E') g.e.x = (int)x, g.e.y = (int)y;
 			g.tiles[y][x] = c == 'S' || c == 'E' ? '.' : c;
-			for (usize d = 0; d < D; d++) g.tracks[y][x][d].cost = MAX_COST;
+			for (usize d = 0; d < D; d++)
+				g.tracks[y][x][d].cost = MAX_COST;
 		}
 	}
 
@@ -204,7 +211,7 @@ i64 solve(char *data) {
 		track(&g, &k);
 
 		if (l.c > best) break;
-		if (arrived(&g, l.p))  best = l.c;
+		if (arrived(&g, l.p)) best = l.c;
 
 		A a = adj(l);
 		for (usize i = 0; i < a.len; i++) {
@@ -219,18 +226,16 @@ i64 solve(char *data) {
 	for (u8 d = 0; d < D; d++)
 		s.elems[s.len++] = (L){.p = g.e, .d = d, .c = best};
 
-	while(s.len--) {
+	while (s.len--) {
 		L l = s.elems[s.len];
 		travel(&g, &l);
 		T *ts = tracks_to(&g, &l);
-		for (usize i = 0; i < ts->n; i++)
-			s.elems[s.len++] = ts->bt[i];
+		for (usize i = 0; i < ts->n; i++) s.elems[s.len++] = ts->bt[i];
 	}
 
 	usize count = 0;
 	for (usize y = 0; y < g.m; y++)
-		for(usize x = 0; x < g.n; x++)
-			count += g.tiles[y][x] == 'O';
+		for (usize x = 0; x < g.n; x++) count += g.tiles[y][x] == 'O';
 
 	result = (i64)count;
 	draw(&g);
