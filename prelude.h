@@ -64,7 +64,8 @@ typedef double   f64;
 
 i64 solve(char *data);
 
-static char *read_to_string(const char *restrict fname) {
+char *read_to_string(const char *restrict fname);
+char *read_to_string(const char *restrict fname) {
 	FILE *file = fopen(fname, "r");
 	if (!file) {
 		perror(fname);
@@ -114,4 +115,18 @@ static char *read_to_string(const char *restrict fname) {
 	}
 
 	return content;
+}
+
+char *strsplit(char **s, const char *sep);
+char *strsplit(char **s, const char *sep) {
+	char *ret = *s;
+	if (!sep[0]) return ret;
+	char *w = strstr(*s, sep);
+	if (!w) {
+		*s = strchr(*s, '\0');
+	} else {
+		w[0] = '\0';
+		*s = w + strlen(sep);
+	}
+	return ret;
 }
