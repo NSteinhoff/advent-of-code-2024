@@ -130,3 +130,25 @@ char *strsplit(char **s, const char *sep) {
 	}
 	return ret;
 }
+
+typedef struct {
+	usize s, e, size, len;
+} Queue;
+
+usize qpush(Queue *q);
+usize qpush(Queue *q) {
+	assert(q->len < q->size);
+	usize i = q->e;
+	q->e = q->e < q->size - 1 ? q->e + 1 : 0;
+	q->len++;
+	return i;
+}
+
+usize qpop(Queue *q);
+usize qpop(Queue *q) {
+	assert(q->len > 0);
+	usize i = q->s;
+	q->s = q->s < q->size - 1 ? q->s + 1 : 0;
+	q->len--;
+	return i;
+}

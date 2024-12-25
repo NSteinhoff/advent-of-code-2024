@@ -13,29 +13,11 @@ static const i64 expected = 22;
 static int size = 6;
 static int num_bytes = 12;
 
+typedef Queue Q;
+
 typedef struct {
 	int x, y, s;
 } P;
-
-typedef struct {
-	usize s, e, size, len;
-} Q;
-
-static usize push(Q *q) {
-	assert(q->len < q->size);
-	usize i = q->e;
-	q->e = q->e < q->size - 1 ? q->e + 1 : 0;
-	q->len++;
-	return i;
-}
-
-static usize pop(Q *q) {
-	assert(q->len > 0);
-	usize i = q->s;
-	q->s = q->s < q->size - 1 ? q->s + 1 : 0;
-	q->len--;
-	return i;
-}
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
@@ -55,9 +37,9 @@ i64 solve(char *data) {
 	Q q = {.size = MAX_Q};
 	P ps[MAX_Q];
 
-	ps[push(&q)] = (P){0};
+	ps[qpush(&q)] = (P){0};
 	while (q.len) {
-		P p = ps[pop(&q)];
+		P p = ps[qpop(&q)];
 		if (visited[p.y][p.x]) continue;
 		visited[p.y][p.x] = true;
 
@@ -77,7 +59,7 @@ i64 solve(char *data) {
 			if (pp.x < 0 || pp.x > size || pp.y < 0 || pp.y > size)
 				continue;
 			if (blocked[pp.y][pp.x]) continue;
-			ps[push(&q)] = pp;
+			ps[qpush(&q)] = pp;
 		}
 	}
 
