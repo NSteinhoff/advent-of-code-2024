@@ -1,27 +1,21 @@
 #include "prelude.h"
 
-#define DAY "4"
+#define DAY "04"
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-static const i64 expected = 18;
-static const char *w = "XMAS";
+static const i64 expected = 9;
+const char *w = "MAS";
 
 static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
-	usize len = strlen(w);
 	int dx = (*dir)[0];
 	int dy = (*dir)[1];
 
-	for (usize i = 1; i < len; i++) {
+	for (int i = -1; i <= 1; i++) {
 		int xx = (int)x + dx * (int)i;
 		int yy = (int)y + dy * (int)i;
-
-		if (xx < 0 || xx >= (int)n || yy < 0 || yy >= (int)n)
-			return false;
-
 		char c = data[ATS((usize)xx, (usize)yy, n)];
-
-		if (c != w[i]) return false;
+		if (c != w[i + 1]) return false;
 	}
 
 	return true;
@@ -35,27 +29,25 @@ i64 solve(char *data) {
 
 	// clang-format off
 	int directions[][2] = {
-		{ 0, -1},
 		{ 1, -1},
-		{ 1,  0},
 		{ 1,  1},
-		{ 0,  1},
 		{-1,  1},
-		{-1,  0},
 		{-1, -1},
 	};
 	// clang-format on
 
-	// Find the 'X'
-	for (usize y = 0; y < n; y++) {
-		for (usize x = 0; x < n; x++) {
-			if (data[ATS(x, y, n)] != 'X') continue;
+	// Find the 'A'
+	for (usize y = 1; y < n - 1; y++) {
+		for (usize x = 1; x < n - 1; x++) {
+			if (data[ATS(x, y, n)] != 'A') continue;
 
-			// Run search in all 8 directions
+			// Run search in the 4 diagonals
+			usize num = 0;
 			for (usize i = 0; i < ASZ(directions); i++) {
 				if (search(data, x, y, n, &directions[i]))
-					result++;
+					num++;
 			}
+			if (num == 2) result++;
 		}
 	}
 

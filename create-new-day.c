@@ -9,7 +9,11 @@ int main(int argc, char *argv[argc]) {
 		return 1;
 	}
 
-	const char *day = argv[1];
+	const int day = atoi(argv[1]);
+	if (!day) {
+		printf("Error parsing <day> argument. Must be a number!");
+		return 1;
+	}
 	char *template = read_to_string("template.c");
 	if (!template) {
 		printf("Error reading template file\n");
@@ -17,9 +21,9 @@ int main(int argc, char *argv[argc]) {
 	}
 
 	char fname[32];
-	int len = snprintf(fname, sizeof fname, "%s-1.c", day);
+	int len = snprintf(fname, sizeof fname, "%02d-1.c", day);
 	if (len < 0 || (usize)len >= sizeof fname) {
-		printf("Error creating file name for day '%s'\n", day);
+		printf("Error creating file name for day '%02d'\n", day);
 		return 1;
 	}
 	printf("Creating: %s\n", fname);
@@ -40,7 +44,7 @@ int main(int argc, char *argv[argc]) {
 	isize preflen = placeholder - pref;
 	char *suff = placeholder + seplen;
 
-	fprintf(fp, "%.*s%s%s", (int)preflen, pref, day, suff);
+	fprintf(fp, "%.*s%02d%s", (int)preflen, pref, day, suff);
 	fclose(fp);
 
 	return 0;

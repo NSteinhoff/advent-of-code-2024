@@ -1,15 +1,27 @@
 #include "prelude.h"
 
-#define DAY "5"
+#define DAY "05"
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 #define N 100
 
-static const i64 expected = 143;
+static const i64 expected = 123;
 
 static int rules[N][N] = {0};
 static usize num[N] = {0};
+
+static int cmp(const void *left, const void *right) {
+	int a = *(int *)left;
+	int b = *(int *)right;
+
+	for (usize i = 0; i < num[a]; i++)
+		if (rules[a][i] == b) return -1;
+	for (usize i = 0; i < num[b]; i++)
+		if (rules[b][i] == a) return 1;
+
+	return 0;
+}
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
@@ -42,7 +54,10 @@ i64 solve(char *data) {
 				}
 			}
 		}
-		if (valid) result += pages[len / 2];
+		if (!valid) {
+			qsort(pages, len, sizeof *pages, cmp);
+			result += pages[len / 2];
+		}
 	}
 
 	return result;

@@ -1,7 +1,7 @@
 .PHONY: help list clean
 
 CC         := clang
-CFLAGS     := $(CFLAGS) -g -std=c17
+CFLAGS     := $(CFLAGS) -std=c17
 CFLAGS     += -Wall -Wextra -pedantic
 CFLAGS     += -Wconversion -Wmissing-prototypes
 COMPILE.c  := $(CC) $(CFLAGS)

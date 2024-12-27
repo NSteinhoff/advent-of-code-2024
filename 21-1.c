@@ -1,32 +1,22 @@
+// clang-format on
 #include "prelude.h"
 
-#define DAY "3"
+#define DAY "21"
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-const i64 expected = 161;
+static const i64 expected = -1;
+
+static char numpad[4][3] = {
+	"123",
+	"456",
+	"789",
+	".0A",
+};
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
-	usize n = strlen(data);
-	for (usize i = 0; i < n; i++) {
-		if (strncmp(data + i, "mul(", 4)) continue;
-
-		usize ii = i + 4;
-		char *arg = data + ii;
-		for (; ii < n && isdigit(data[ii]); ii++);
-		if (data[ii] != ',') continue;
-		ii++;
-		int x = atoi(arg);
-
-		arg = data + ii;
-		for (; ii < n && isdigit(data[ii]); ii++);
-		if (data[ii] != ')') continue;
-		int y = atoi(arg);
-
-		result += x * y;
-	}
 
 	return result;
 }
@@ -41,3 +31,4 @@ int main(void) {
 	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }
+

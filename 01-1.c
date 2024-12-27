@@ -1,10 +1,10 @@
 #include "prelude.h"
 
-#define DAY "1"
+#define DAY "01"
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-const i64 expected = 31;
+const i64 expected = 11;
 
 #define N 1000
 
@@ -30,17 +30,7 @@ i64 solve(char *data) {
 	qsort(b, n, sizeof *b, compar);
 
 	int total = 0;
-	usize j = 0;
-	for (usize i = 0; i < n; i++) {
-		int na = 1;
-		int nb = 0;
-		// clang-format off
-		for (; j     < n && a[i]     >  b[j]; j++) /* pass */; // find match
-		for (; j     < n && a[i]     == b[j]; j++) nb++;       // count matches
-		for (; i + 1 < n && a[i + 1] == a[i]; i++) na++;       // count instances
-		total += a[i] * nb * na;
-		// clang-format on
-	}
+	for (usize i = 0; i < n; i++) total += abs(a[i] - b[i]);
 
 	return total;
 }

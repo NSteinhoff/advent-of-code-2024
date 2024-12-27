@@ -1,6 +1,6 @@
 #include "prelude.h"
 
-#define DAY "3"
+#define DAY "03"
 #define INPUT DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
