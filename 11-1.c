@@ -1,12 +1,12 @@
 #include "prelude.h"
 
-#define DAY "11"
-#define INPUT DAY ".txt"
+#define DAY    "11"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 55312;
 
-#define N 100
+#define N    100
 #define ITER 25
 
 typedef struct {
@@ -25,7 +25,7 @@ static void split(usize num, usize len, usize *left, usize *right) {
 	assert(len % 2 == 0);
 	usize div = 1;
 	for (usize d = len / 2; d > 0; d--) div *= 10;
-	*left = num / div;
+	*left  = num / div;
 	*right = num % div;
 }
 
@@ -37,14 +37,14 @@ i64 solve(char *data) {
 	usize n = 0;
 
 	for_each_token(data, t, " \n") {
-		usize num = (usize)atoll(t);
 		assert(n < N);
+		usize num = (usize)atoll(t);
 		stones[n] = (Stone){.num = num, .iter = ITER};
 		n++;
 	}
 
 	while (n--) {
-		Stone s = stones[n];
+		Stone s   = stones[n];
 		usize len = num_digits(s.num);
 
 		if (s.iter == 0) {
@@ -57,7 +57,7 @@ i64 solve(char *data) {
 			stones[n++] = (Stone){.num = left, .iter = s.iter - 1};
 			stones[n++] = (Stone){.num = right, .iter = s.iter - 1};
 		} else {
-			stones[n++] = (Stone){.num = s.num * 2024,
+			stones[n++] = (Stone){.num  = s.num * 2024,
 			                      .iter = s.iter - 1};
 		}
 	}

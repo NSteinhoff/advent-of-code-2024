@@ -9,7 +9,7 @@
 #define M     141
 #define N     M
 
-static int       saving = 72;
+static int       saving   = 72;
 static const i64 expected = 29;
 
 typedef struct {
@@ -35,10 +35,10 @@ static inline bool outside(P p) {
 
 static uint count(P p, const int dists[M][N]) {
 	const int radius = 20;
-	uint      count = 0;
+	uint      count  = 0;
 	for (int r = 2; r <= radius; r++) {
 		for (int dy = 0; dy <= r; dy++) {
-			int dx = r - dy;
+			int dx       = r - dy;
 			P   cheats[] = {
                                 {p.x + dx, p.y + dy},
                                 {p.x + dx, p.y - dy},
@@ -62,12 +62,13 @@ static uint count(P p, const int dists[M][N]) {
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
+
 	G.n = (int)strcspn(data, "\n");
 	G.m = (int)strlen(data) / (G.n + 1);
 	printf("G: %d x %d\n", G.m, G.n);
 	assert(G.n <= N && G.m <= M);
 
-	int  dists[M][N] = {0};
+	int  dists[M][N]   = {0};
 	bool blocked[M][N] = {0};
 
 	for (int y = 0; y < G.m; y++) {
@@ -82,17 +83,15 @@ i64 solve(char *data) {
 
 	printf("S: %d,%d | E:%d,%d\n", G.s.x, G.s.y, G.e.x, G.e.y);
 
-	P p = G.s;
+	P p             = G.s;
 	dists[p.y][p.x] = 0;
 	while (p.x != G.e.x || p.y != G.e.y) {
-		// clang-format off
 		P adj[] = {
-			{p.x    , p.y - 1},
-			{p.x + 1, p.y    },
-			{p.x    , p.y + 1},
-			{p.x - 1, p.y    },
+			{    p.x, p.y - 1},
+			{p.x + 1,     p.y},
+			{    p.x, p.y + 1},
+			{p.x - 1,     p.y},
 		};
-		// clang-format on
 
 		for (usize j = 0; j < ASZ(adj); j++) {
 			P pp = adj[j];
@@ -100,7 +99,7 @@ i64 solve(char *data) {
 			if (blocked[pp.y][pp.x]) continue;
 			if (dists[pp.y][pp.x] != -1) continue;
 			dists[pp.y][pp.x] = dists[p.y][p.x] + 1;
-			p = pp;
+			p                 = pp;
 		}
 	}
 

@@ -1,16 +1,16 @@
 // clang-format on
 #include "prelude.h"
 
-#define DAY "18"
-#define INPUT DAY ".txt"
+#define DAY    "18"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-#define N 71
+#define N     71
 #define MAX_Q 300
 
 static const i64 expected = 22;
 
-static int size = 6;
+static int size      = 6;
 static int num_bytes = 12;
 
 typedef Queue Q;
@@ -49,10 +49,10 @@ i64 solve(char *data) {
 		}
 
 		P adj[4] = {
-			{p.x,     p.y - 1, p.s + 1},
-			{p.x + 1, p.y,     p.s + 1},
-			{p.x,     p.y + 1, p.s + 1},
-			{p.x - 1, p.y,     p.s + 1},
+			{    p.x, p.y - 1, p.s + 1},
+			{p.x + 1,     p.y, p.s + 1},
+			{    p.x, p.y + 1, p.s + 1},
+			{p.x - 1,     p.y, p.s + 1},
 		};
 		for (usize j = 0; j < 4; j++) {
 			P pp = adj[j];
@@ -73,7 +73,7 @@ int main(void) {
 		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	size = 70;
+	size      = 70;
 	num_bytes = 1024;
 	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;

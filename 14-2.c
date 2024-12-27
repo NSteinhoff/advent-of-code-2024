@@ -1,13 +1,13 @@
 #include "prelude.h"
 
-#define DAY "14"
-#define INPUT DAY ".txt"
+#define DAY    "14"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 #define MAX_BOTS 500
 
 static const i64 expected = 1;
-static int n, m;
+static int       n, m;
 
 typedef struct {
 	int x, y;
@@ -18,7 +18,7 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	R rs[MAX_BOTS];
+	R     rs[MAX_BOTS];
 	usize nr = 0;
 	for_each_line(data, line) {
 		R r;

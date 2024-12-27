@@ -1,11 +1,11 @@
 #include "prelude.h"
 
-#define DAY "08"
-#define INPUT DAY ".txt"
+#define DAY    "08"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
-#define N 50
-#define MAX_ANTENNA 256
+#define N            50
+#define MAX_ANTENNA  256
 #define MAX_LOCATION 32
 
 static const i64 expected = 14;
@@ -17,13 +17,16 @@ typedef struct {
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
+
 	usize n = strcspn(data, "\n");
 	assert(n <= N);
-	Loc locs[MAX_ANTENNA][MAX_LOCATION] = {0};
-	uchar cs[MAX_ANTENNA] = {0};
-	uchar ks[MAX_ANTENNA] = {0};
+
+	Loc   locs[MAX_ANTENNA][MAX_LOCATION] = {0};
+	uchar cs[MAX_ANTENNA]                 = {0};
+	uchar ks[MAX_ANTENNA]                 = {0};
+	bool  antinodes[N][N]                 = {0};
+
 	uchar k = 0;
-	bool antinodes[N][N] = {0};
 
 	for (usize y = 0; y < n; y++) {
 		for (usize x = 0; x < n; x++) {
@@ -43,10 +46,10 @@ i64 solve(char *data) {
 			for (usize w = 0; w < ks[c]; w++) {
 				if (w == u) continue;
 				Loc *ll = &locs[c][w];
-				i8 dx = l->x - ll->x;
-				i8 dy = l->y - ll->y;
-				i8 x = l->x + dx;
-				i8 y = l->y + dy;
+				i8   dx = l->x - ll->x;
+				i8   dy = l->y - ll->y;
+				i8   x  = l->x + dx;
+				i8   y  = l->y + dy;
 				if (x >= 0 && x < (i8)n && y >= 0 && y < (i8)n)
 					antinodes[y][x] = true;
 			}

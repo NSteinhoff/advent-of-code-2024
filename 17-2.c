@@ -1,8 +1,8 @@
 // clang-format on
 #include "prelude.h"
 
-#define DAY "17"
-#define INPUT DAY ".txt"
+#define DAY     "17"
+#define INPUT   DAY ".txt"
 #define MAX_OUT 32
 
 static u64 find(u8 n, const u8 prog[n], u64 ans) {
@@ -16,8 +16,8 @@ static u64 find(u8 n, const u8 prog[n], u64 ans) {
 		c = a >> b;
 		b = b ^ 5;
 		b = b ^ c;
-		if (b % 8 == prog[n-1]) {
-			u64 sub = find(n-1, prog, a);
+		if (b % 8 == prog[n - 1]) {
+			u64 sub = find(n - 1, prog, a);
 			if (sub) return sub;
 		}
 	}

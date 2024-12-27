@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "15"
-#define INPUT DAY ".txt"
+#define DAY    "15"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 9021;
@@ -17,14 +17,14 @@ typedef struct {
 
 static struct {
 	char *d;
-	int n, m;
+	int   n, m;
 } G;
 
 static P dirs[] = {
-	['^'] = {0,  -1},
-	['>'] = {1,  0 },
-	['v'] = {0,  1 },
-	['<'] = {-1, 0 },
+	['^'] = { 0, -1},
+	['>'] = { 1,  0},
+	['v'] = { 0,  1},
+	['<'] = {-1,  0},
 };
 
 static inline char get(P p) {
@@ -35,9 +35,7 @@ static inline void set(P p, char c) {
 	G.d[ATS((usize)p.x, (usize)p.y, (usize)G.n)] = c;
 }
 
-static inline P step(P p, P s) {
-	return (P){.x = p.x + s.x, .y = p.y + s.y};
-}
+static inline P step(P p, P s) { return (P){.x = p.x + s.x, .y = p.y + s.y}; }
 
 static inline usize push(usize len, P *moving, P p) {
 	for (usize i = 0; i < len; i++)
@@ -51,12 +49,12 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	char grid[N * M + M + 1];
-	char *moves = strstr(data, "\n\n");
+	char  grid[N * M + M + 1];
+	char *moves  = strstr(data, "\n\n");
 	// Split at the second NL to keep the traling NL in the last row
-	moves[1] = '\0';
-	moves += 2;
-	usize len = 0;
+	moves[1]     = '\0';
+	moves       += 2;
+	usize len    = 0;
 	for (char *c = data; *c; c++) {
 		if (*c == 'O') {
 			grid[len++] = '[';
@@ -77,7 +75,7 @@ i64 solve(char *data) {
 	G.n = (int)strcspn(G.d, "\n");
 	G.m = (int)strlen(G.d) / (G.n + 1);
 
-	P p = {0};
+	P    p     = {0};
 	bool found = false;
 	for (int y = 0; y < G.m && !found; y++) {
 		for (int x = 0; x < G.n && !found; x++) {
@@ -89,11 +87,11 @@ i64 solve(char *data) {
 		if (*mv == '\n') continue;
 		P d = dirs[(usize)*mv];
 
-		P moving[MAX_MOVING];
+		P     moving[MAX_MOVING];
 		usize len = push(0, moving, p);
-		bool go = true;
+		bool  go  = true;
 		for (usize i = 0; i < len && go; i++) {
-			P p = moving[i];
+			P p  = moving[i];
 			P pp = step(p, d);
 			if (get(pp) == '#') {
 				go = false;
@@ -101,18 +99,20 @@ i64 solve(char *data) {
 			} else if (get(pp) == '[') {
 				len = push(len, moving, pp);
 				if (d.x == 0)
-					len = push(len, moving,
-					           (P){pp.x + 1, pp.y});
+					len =
+						push(len, moving,
+					             (P){pp.x + 1, pp.y});
 			} else if (get(pp) == ']') {
 				len = push(len, moving, pp);
 				if (d.x == 0)
-					len = push(len, moving,
-					           (P){pp.x - 1, pp.y});
+					len =
+						push(len, moving,
+					             (P){pp.x - 1, pp.y});
 			}
 		}
 		if (go) {
 			while (len--) {
-				P p = moving[len];
+				P p  = moving[len];
 				P pp = step(p, d);
 				assert(get(pp) == '.');
 				set(pp, get(p));

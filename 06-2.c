@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "06"
-#define INPUT DAY ".txt"
+#define DAY    "06"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 6;
@@ -11,14 +11,14 @@ static const i64 expected = 6;
 struct {
 	int x, y;
 } steps[4] = {
-	{0,  -1}, // N
-	{1,  0 }, // E
-	{0,  1 }, // S
-	{-1, 0 }, // W
+	{ 0, -1}, // N
+	{ 1,  0}, // E
+	{ 0,  1}, // S
+	{-1,  0}, // W
 };
 
 enum {
-	EMPTY = 0,
+	EMPTY   = 0,
 	BLOCKED = 1 << ASZ(steps),
 	VISITED = BLOCKED << 1,
 };
@@ -34,20 +34,19 @@ enum {
 //      | + --------------> ?
 //      + ----------------> ?
 
-#define VISIT(x) (x |= VISITED)
-#define IS_VISITED(x) (x & VISITED)
-#define BLOCK(x) (x |= BLOCKED)
-#define IS_BLOCKED(x) (x & BLOCKED)
-#define MARK(x, d) (x |= (1 << d))
+#define VISIT(x)        (x |= VISITED)
+#define IS_VISITED(x)   (x & VISITED)
+#define BLOCK(x)        (x |= BLOCKED)
+#define IS_BLOCKED(x)   (x & BLOCKED)
+#define MARK(x, d)      (x |= (1 << d))
 #define IS_MARKED(x, d) (x & (1 << d))
 
-#define TURN(s) ((s) = (s + 1) % ASZ(steps))
+#define TURN(s)          ((s) = (s + 1) % ASZ(steps))
 #define IS_OUTSIDE(x, y) (x < 0 || y < 0 || (usize)x >= n || (usize)y >= n)
 
-static u8 map_start[N][N];
-static u8 map_block[N][N];
+static u8    map_start[N][N];
+static u8    map_block[N][N];
 static usize n;
-
 
 static void visit(u8 m[N][N], uchar d, int x, int y) {
 	while (true) {
@@ -94,9 +93,9 @@ i64 solve(char *data) {
 	n = strcspn(data, "\n");
 	printf("Map: %zu x %zu\n", n, n);
 
-	uchar d = 0;
-	int x_start = -1;
-	int y_start = -1;
+	uchar d       = 0;
+	int   x_start = -1;
+	int   y_start = -1;
 
 	usize y = 0;
 	for_each_line(data, line) {

@@ -11,7 +11,7 @@
 
 static const i64 expected = 0;
 
-static int size = 6;
+static int size      = 6;
 static int num_bytes = 12;
 
 typedef struct {
@@ -25,7 +25,7 @@ typedef struct {
 static usize push(Q *q) {
 	assert(q->len < q->size);
 	usize i = q->e;
-	q->e = q->e < q->size - 1 ? q->e + 1 : 0;
+	q->e    = q->e < q->size - 1 ? q->e + 1 : 0;
 	q->len++;
 	return i;
 }
@@ -33,7 +33,7 @@ static usize push(Q *q) {
 static usize pop(Q *q) {
 	assert(q->len > 0);
 	usize i = q->s;
-	q->s = q->s < q->size - 1 ? q->s + 1 : 0;
+	q->s    = q->s < q->size - 1 ? q->s + 1 : 0;
 	q->len--;
 	return i;
 }
@@ -55,14 +55,12 @@ static bool connected(usize len, int drops[len][2], usize n) {
 		if (visited[p.y][p.x]) continue;
 		visited[p.y][p.x] = true;
 
-		// clang-format off
 		P adj[4] = {
-			{p.x,     p.y - 1},
-			{p.x + 1, p.y    },
-			{p.x,     p.y + 1},
-			{p.x - 1, p.y    },
+			{    p.x, p.y - 1},
+			{p.x + 1,     p.y},
+			{    p.x, p.y + 1},
+			{p.x - 1,     p.y},
 		};
-		// clang-format on
 		for (usize j = 0; j < 4; j++) {
 			P pp = adj[j];
 			if (pp.x < 0 || pp.x > size || pp.y < 0 || pp.y > size)
@@ -80,7 +78,7 @@ i64 solve(char *data) {
 	i64 result = 0;
 
 	int   drops[MAX_BYTES][2] = {0};
-	usize len = 0;
+	usize len                 = 0;
 
 	for (char *line = strtok(data, "\n"); line; line = strtok(NULL, "\n")) {
 		int x, y;
@@ -113,7 +111,7 @@ int main(void) {
 		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	size = 70;
+	size      = 70;
 	num_bytes = 1024;
 	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;

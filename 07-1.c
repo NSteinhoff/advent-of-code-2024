@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "07"
-#define INPUT DAY ".txt"
+#define DAY    "07"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 3749;
@@ -20,9 +20,9 @@ i64 solve(char *data) {
 
 	for_each_line(data, line) {
 		char *brk;
-		char *value = strtok_r(line, ": ", &brk);
-		i64 target = strtoll(value, NULL, 10);
-		i64 ops[MAX_OPS];
+		char *value  = strtok_r(line, ": ", &brk);
+		i64   target = strtoll(value, NULL, 10);
+		i64   ops[MAX_OPS];
 		usize n = 0;
 		for (n = 0; n < MAX_OPS; n++) {
 			char *op = strtok_r(NULL, " ", &brk);

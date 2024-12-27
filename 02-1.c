@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "02"
-#define INPUT DAY ".txt"
+#define DAY    "02"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 const i64 expected = 2;
@@ -24,10 +24,10 @@ i64 solve(char *data) {
 	i64 result = 0;
 	for_each_line(data, line) {
 		printf("%s ", line);
-		usize n = 0;
-		int xs[MAX_VALUES] = {0};
+		usize n                        = 0;
+		int   xs[MAX_VALUES]           = {0};
 		for_each_word(line, v) xs[n++] = atoi(v);
-		bool is_safe = safe(n, xs);
+		bool is_safe                   = safe(n, xs);
 		if (is_safe) result++;
 		printf("%s\n", is_safe ? "SAFE" : "UNSAFE");
 	}

@@ -1,8 +1,8 @@
 // clang-format on
 #include "prelude.h"
 
-#define DAY "{{DAY}}"
-#define INPUT DAY ".txt"
+#define DAY    "{{DAY}}"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = -1;
@@ -24,4 +24,3 @@ int main(void) {
 	printf("Result: %lld\n", solve(read_to_string(INPUT)));
 	return 0;
 }
-

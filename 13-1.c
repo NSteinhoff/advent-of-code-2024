@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "13"
-#define INPUT DAY ".txt"
+#define DAY    "13"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 480;

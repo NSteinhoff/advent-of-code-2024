@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "07"
-#define INPUT DAY ".txt"
+#define DAY    "07"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 11387;
@@ -9,7 +9,7 @@ static const i64 expected = 11387;
 
 static i64 concat(i64 left, i64 right) {
 	static char buf[64];
-	int len = snprintf(buf, sizeof buf, "%lld%lld", left, right);
+	int         len = snprintf(buf, sizeof buf, "%lld%lld", left, right);
 	assert(len > 0 || (usize)len < sizeof buf - 1);
 	return strtoll(buf, NULL, 10);
 }
@@ -28,9 +28,9 @@ i64 solve(char *data) {
 
 	for_each_line(data, line) {
 		char *brk;
-		char *value = strtok_r(line, ": ", &brk);
-		i64 target = strtoll(value, NULL, 10);
-		i64 ops[MAX_OPS];
+		char *value  = strtok_r(line, ": ", &brk);
+		i64   target = strtoll(value, NULL, 10);
+		i64   ops[MAX_OPS];
 		usize n = 0;
 		for (n = 0; n < MAX_OPS; n++) {
 			char *op = strtok_r(NULL, " ", &brk);

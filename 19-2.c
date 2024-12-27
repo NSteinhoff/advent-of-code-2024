@@ -48,8 +48,8 @@ static inline char *split(char *s, const char *sep) {
 	if (!sep[0]) return s;
 	s = strstr(s, sep);
 	if (!s) return NULL;
-	s[0] = '\0';
-	s += strlen(sep);
+	s[0]  = '\0';
+	s    += strlen(sep);
 	return s;
 }
 
@@ -64,7 +64,7 @@ static usize count_ways(usize np, const char *ps[np], const char *d) {
 
 	usize count = 0;
 	for (usize i = 0; i < np; i++) {
-		const char *p = ps[i];
+		const char *p   = ps[i];
 		usize       len = strlen(p);
 		if (!strncmp(d, p, len)) count += count_ways(np, ps, d + len);
 	}
@@ -86,7 +86,7 @@ i64 solve(char *data) {
 	memset(cache_keys, 0, sizeof cache_keys);
 
 	char *patterns = data;
-	char *designs = split(data, "\n\n");
+	char *designs  = split(data, "\n\n");
 
 	const char *ps[MAX_PATTERNS], *ds[MAX_DESIGNS];
 	usize       np = 0, nd = 0;

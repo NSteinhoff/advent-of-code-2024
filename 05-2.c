@@ -1,15 +1,15 @@
 #include "prelude.h"
 
-#define DAY "05"
-#define INPUT DAY ".txt"
+#define DAY    "05"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 #define N 100
 
 static const i64 expected = 123;
 
-static int rules[N][N] = {0};
-static usize num[N] = {0};
+static int   rules[N][N] = {0};
+static usize num[N]      = {0};
 
 static int cmp(const void *left, const void *right) {
 	int a = *(int *)left;
@@ -29,9 +29,9 @@ i64 solve(char *data) {
 	memset(rules, 0, sizeof rules);
 	memset(num, 0, sizeof num);
 
-	char *updates = strstr(data, "\n\n");
-	*(updates++) = '\0';
-	updates += strspn(updates, "\n");
+	char *updates  = strstr(data, "\n\n");
+	*(updates++)   = '\0';
+	updates       += strspn(updates, "\n");
 
 	for_each_line(data, line) {
 		int a, b;
@@ -40,8 +40,9 @@ i64 solve(char *data) {
 	}
 
 	for_each_line(updates, line) {
-		int pages[N] = {0};
-		usize len = 0;
+		int   pages[N] = {0};
+		usize len      = 0;
+
 		for_each_token(line, s, ",") pages[len++] = atoi(s);
 
 		bool valid = true;

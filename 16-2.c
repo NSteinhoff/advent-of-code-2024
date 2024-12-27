@@ -143,7 +143,7 @@ static inline bool lower(const Q *q, usize i, usize j) {
 }
 
 static inline void swap(Q *q, usize i, usize j) {
-	K tmp = q->elems[j];
+	K tmp       = q->elems[j];
 	q->elems[j] = q->elems[i];
 	q->elems[i] = tmp;
 }
@@ -165,14 +165,14 @@ static void heapify_down(Q *q, usize i) {
 
 static void push(Q *q, K loc) {
 	assert(q->len < ASZ(q->elems) && "Queue full!");
-	usize i = q->len++;
+	usize i     = q->len++;
 	q->elems[i] = loc;
 	heapify_up(q, i);
 }
 
 static K pop(Q *q) {
 	assert(q->len && "Queue empty!");
-	K head = q->elems[0];
+	K head      = q->elems[0];
 	q->elems[0] = q->elems[--q->len];
 	if (q->len) heapify_down(q, 0);
 	return head;
@@ -250,7 +250,7 @@ int main(void) {
 		printf("FAIL: expected %lld actual %lld\n", expected, actual);
 		return 1;
 	}
-	const i64 actual2 = solve(read_to_string(SAMPLE2));
+	const i64 actual2   = solve(read_to_string(SAMPLE2));
 	const i64 expected2 = 64;
 
 	printf("Sample2: %lld\n", actual2);

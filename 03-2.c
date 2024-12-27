@@ -1,16 +1,16 @@
 #include "prelude.h"
 
-#define DAY "03"
-#define INPUT DAY ".txt"
+#define DAY    "03"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 const i64 expected = 48;
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
-	i64 result = 0;
-	usize n = strlen(data);
-	bool enabled = true;
+	i64   result  = 0;
+	usize n       = strlen(data);
+	bool  enabled = true;
 	for (usize i = 0; i < n; i++) {
 		if (!strncmp(data + i, "do()", 4)) {
 			enabled = true;
@@ -24,7 +24,7 @@ i64 solve(char *data) {
 		if (!enabled) continue;
 		if (strncmp(data + i, "mul(", 4)) continue;
 
-		usize ii = i + 4;
+		usize ii  = i + 4;
 		char *arg = data + ii;
 		for (; ii < n && isdigit(data[ii]); ii++);
 		if (data[ii] != ',') continue;

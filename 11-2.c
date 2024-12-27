@@ -1,12 +1,12 @@
 #include "prelude.h"
 
-#define DAY "11"
-#define INPUT DAY ".txt"
+#define DAY    "11"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 65601038650482;
 
-#define ITER 75
+#define ITER       75
 #define MAX_CACHED 2024
 
 static usize cache[MAX_CACHED + 1][ITER + 1] = {0};
@@ -23,7 +23,7 @@ static void split(usize num, usize len, usize *left, usize *right) {
 	assert(len % 2 == 0);
 	usize div = 1;
 	for (usize d = len / 2; d > 0; d--) div *= 10;
-	*left = num / div;
+	*left  = num / div;
 	*right = num % div;
 }
 
@@ -55,8 +55,8 @@ i64 solve(char *data) {
 	i64 result = 0;
 
 	for_each_token(data, t, " \n") {
-		usize num = (usize)atoll(t);
-		result += count(num, ITER);
+		usize num  = (usize)atoll(t);
+		result    += count(num, ITER);
 	}
 
 	return result;

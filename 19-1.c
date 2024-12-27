@@ -15,16 +15,16 @@ static inline char *split(char *s, const char *sep) {
 	if (!sep[0]) return s;
 	s = strstr(s, sep);
 	if (!s) return NULL;
-	s[0] = '\0';
-	s += strlen(sep);
+	s[0]  = '\0';
+	s    += strlen(sep);
 	return s;
 }
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
-	i64   result = 0;
+	i64   result   = 0;
 	char *patterns = data;
-	char *designs = split(data, "\n\n");
+	char *designs  = split(data, "\n\n");
 
 	char *ps[MAX_PATTERNS], *ds[MAX_DESIGNS];
 	usize np = 0, nd = 0;
@@ -44,7 +44,7 @@ i64 solve(char *data) {
 	usize count = 0;
 	for (usize i = 0; i < nd; i++) {
 		char *stack[MAX_STACK];
-		usize top = 0;
+		usize top    = 0;
 		stack[top++] = ds[i];
 		while (top--) {
 			char *d = stack[top];
@@ -53,7 +53,7 @@ i64 solve(char *data) {
 				break;
 			}
 			for (usize j = 0; j < np; j++) {
-				char *p = ps[j];
+				char *p   = ps[j];
 				usize len = strlen(p);
 				if (!strncmp(d, p, len)) {
 					assert(top < MAX_STACK);

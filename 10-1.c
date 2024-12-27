@@ -1,12 +1,12 @@
 #include "prelude.h"
 
-#define DAY "10"
-#define INPUT DAY ".txt"
+#define DAY    "10"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 #define MAX_STARTS 500
-#define MAX_STACK 10
-#define MAX_PEAKS 10
+#define MAX_STACK  10
+#define MAX_PEAKS  10
 
 static const i64 expected = 36;
 
@@ -17,17 +17,17 @@ typedef struct {
 #define HEIGHT(x, y) (data[ATS((x), (y), nrows)])
 
 Pos dirs[] = {
-	{.x = 1,  .y = 0 },
-	{.x = -1, .y = 0 },
-	{.x = 0,  .y = 1 },
-	{.x = 0,  .y = -1},
+	{ .x = 1,  .y = 0},
+	{.x = -1,  .y = 0},
+	{ .x = 0,  .y = 1},
+	{ .x = 0, .y = -1},
 };
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	int len = (int)strlen(data);
+	int len   = (int)strlen(data);
 	int ncols = (int)strcspn(data, "\n");
 	int nrows = len / (ncols + 1);
 
@@ -54,7 +54,7 @@ i64 solve(char *data) {
 		// Depth-first
 		stack[top++] = starts[i];
 		while (top > 0) {
-			Pos p = stack[--top];
+			Pos p      = stack[--top];
 			int height = HEIGHT(p.x, p.y);
 			if (height == '9') {
 				bool visited = false;

@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "13"
-#define INPUT DAY ".txt"
+#define DAY    "13"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 875318608908;
@@ -24,9 +24,9 @@ static i64 calculate_cost(i64 ax, i64 ay, i64 bx, i64 by, i64 px, i64 py) {
 	// a = (px*by - py*bx) / (ax*by - ay*bx)
 	// b = (px - a*ax) / bx
 	assert(ax * by - ay * bx != 0);
-	i64 a = (px * by - py * bx) / (ax * by - ay * bx);
+	i64 a  = (px * by - py * bx) / (ax * by - ay * bx);
 	i64 ra = (px * by - py * bx) % (ax * by - ay * bx);
-	i64 b = (px - a * ax) / bx;
+	i64 b  = (px - a * ax) / bx;
 	i64 rb = (px - a * ax) % bx;
 
 	if (ra || rb) return 0;
@@ -48,10 +48,9 @@ i64 solve(char *data) {
 		s = strchr(s, '\n') + 1;
 		sscanf(s, "Prize: X=%d, Y=%d", &px, &py);
 
-		i64 cost = calculate_cost((i64)ax, (i64)ay, (i64)bx, (i64)by,
-		                          (i64)px + c, (i64)py + c);
-		/*printf("a=[%d,%d] b=[%d,%d] p=[%d,%d] -> %lld\n", ax, ay, bx,*/
-		/*       by, px, py, cost);*/
+		i64 cost = calculate_cost(
+			(i64)ax, (i64)ay, (i64)bx, (i64)by, (i64)px + c,
+			(i64)py + c);
 
 		result += cost;
 	}

@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "01"
-#define INPUT DAY ".txt"
+#define DAY    "01"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 const i64 expected = 11;
@@ -16,7 +16,7 @@ static int compar(const void *x, const void *y) {
 }
 
 i64 solve(char *data) {
-	int a[N], b[N];
+	int   a[N], b[N];
 	usize n = 0;
 
 	for_each_line(data, line) {

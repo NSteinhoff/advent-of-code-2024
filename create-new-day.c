@@ -21,7 +21,7 @@ int main(int argc, char *argv[argc]) {
 	}
 
 	char fname[32];
-	int len = snprintf(fname, sizeof fname, "%02d-1.c", day);
+	int  len = snprintf(fname, sizeof fname, "%02d-1.c", day);
 	if (len < 0 || (usize)len >= sizeof fname) {
 		printf("Error creating file name for day '%02d'\n", day);
 		return 1;
@@ -31,10 +31,10 @@ int main(int argc, char *argv[argc]) {
 	FILE *fp = fopen(fname, "w");
 	if (!fp) perror("open target file");
 
-	const char *sep = "{{DAY}}";
-	usize seplen = strlen(sep);
+	const char *sep    = "{{DAY}}";
+	usize       seplen = strlen(sep);
 
-	char *pref = template;
+	char *pref        = template;
 	char *placeholder = strstr(template, sep);
 	if (!placeholder) {
 		printf("Placeholder '%s' not found in template", sep);
@@ -42,7 +42,7 @@ int main(int argc, char *argv[argc]) {
 		return 1;
 	}
 	isize preflen = placeholder - pref;
-	char *suff = placeholder + seplen;
+	char *suff    = placeholder + seplen;
 
 	fprintf(fp, "%.*s%02d%s", (int)preflen, pref, day, suff);
 	fclose(fp);

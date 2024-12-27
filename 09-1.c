@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "09"
-#define INPUT DAY ".txt"
+#define DAY    "09"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 // 6390180901651
@@ -15,8 +15,8 @@ i64 solve(char *data) {
 
 	usize n = (strcspn(data, "\n") + 1) / 2;
 
-	usize last = n - 1;
-	u8 last_len = LEN(last * 2);
+	usize last     = n - 1;
+	u8    last_len = LEN(last * 2);
 
 	usize block = 0;
 	for (usize file = 0; file < n; file++) {

@@ -1,12 +1,12 @@
 #include "prelude.h"
 
-#define DAY "12"
-#define INPUT DAY ".txt"
+#define DAY    "12"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 1930;
 
-#define N 150
+#define N       150
 #define MAX_POS 300
 #define MAX_FNC 200
 
@@ -23,27 +23,27 @@ typedef struct {
 } P;
 
 typedef struct {
-	P p;
+	P     p;
 	usize d;
 } F;
 
 typedef struct {
-	char c;
+	char  c;
 	usize np, nf;
-	P ps[MAX_POS];
-	F fs[MAX_FNC];
+	P     ps[MAX_POS];
+	F     fs[MAX_FNC];
 } R;
 
 static P dirs[4] = {
-	{0,  -1}, // N
-	{1,  0 }, // E
-	{0,  1 }, // S
-	{-1, 0 }, // W
+	{ 0, -1}, // N
+	{ 1,  0}, // E
+	{ 0,  1}, // S
+	{-1,  0}, // W
 };
 
 static struct {
 	char *d;
-	int n, m;
+	int   n, m;
 } G;
 
 static inline P step(P p, usize d) {

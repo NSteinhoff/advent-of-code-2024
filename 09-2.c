@@ -1,7 +1,7 @@
 #include "prelude.h"
 
-#define DAY "09"
-#define INPUT DAY ".txt"
+#define DAY    "09"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 static const i64 expected = 2858;
@@ -12,7 +12,7 @@ static const i64 expected = 2858;
 
 typedef struct {
 	int file; // -1 for free space
-	u8 len;   // Counting up from 0 for files and down from max 'len' for free space
+	u8 len; // Counting up from 0 for files and down from max 'len' for free space
 } Block;
 
 static Block blocks[MAX_BLOCKS];
@@ -26,7 +26,7 @@ i64 solve(char *data) {
 
 	usize n_blocks = 0;
 	for (usize i = 0; i < n; i++) {
-		u8 len = LEN(data[i]);
+		u8  len  = LEN(data[i]);
 		int file = i % 2 == 0 ? (int)i / 2 : -1;
 
 		for (u8 j = 0; j < len; j++) {
@@ -37,8 +37,8 @@ i64 solve(char *data) {
 
 	for (usize i = 0; i < n_blocks; i++) {
 		// Find start of next file from the end
-		usize ii = n_blocks - 1 - i;
-		Block *b = &blocks[ii];
+		usize  ii = n_blocks - 1 - i;
+		Block *b  = &blocks[ii];
 		if (b->file == -1 || b->len != 0) continue;
 
 		// Find the length of the file
@@ -62,7 +62,7 @@ i64 solve(char *data) {
 		// Move the block
 		for (u8 j = 0; j < len; j++) {
 			bb[j] = b[j];
-			b[j] = (Block){.file = -1, .len = len - j};
+			b[j]  = (Block){.file = -1, .len = len - j};
 		}
 	}
 

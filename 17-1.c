@@ -1,12 +1,12 @@
 // clang-format on
 #include "prelude.h"
 
-#define DAY "17"
-#define INPUT DAY ".txt"
-#define SAMPLE DAY "-s.txt"
+#define DAY              "17"
+#define INPUT            DAY ".txt"
+#define SAMPLE           DAY "-s.txt"
 #define MAX_INSTRUCTIONS 32
-#define MAX_PROGRAM 256
-#define MAX_OUT 256
+#define MAX_PROGRAM      256
+#define MAX_OUT          256
 
 static const i64 expected = 600;
 
@@ -14,7 +14,7 @@ static struct {
 	uint a, b, c;
 	uint pc;
 	uint len;
-	u8 instr[MAX_INSTRUCTIONS];
+	u8   instr[MAX_INSTRUCTIONS];
 	char out[MAX_OUT];
 } G;
 
@@ -39,8 +39,8 @@ static inline uint combo(u8 p) {
 }
 
 static inline bool out(uint v) {
-	int len = snprintf(G.out, sizeof G.out, "%s%s%d", G.out,
-	                   G.out[0] ? "," : "", v);
+	int len = snprintf(
+		G.out, sizeof G.out, "%s%s%d", G.out, G.out[0] ? "," : "", v);
 	assert(len > 0 && (usize)len < sizeof G.out && "Invalid output!");
 	return false;
 }
@@ -50,8 +50,8 @@ i64 solve(char *data) {
 	i64 result = 0;
 	memset(&G, 0, sizeof G);
 
-	const char *c = data;
-	char prog[MAX_PROGRAM] = {0};
+	const char *c                 = data;
+	char        prog[MAX_PROGRAM] = {0};
 	sscanf(c,
 	       "Register A: %d\nRegister B: %d\nRegister C:%d\nProgram: %63[0-9,]\n",
 	       &G.a, &G.b, &G.c, prog);

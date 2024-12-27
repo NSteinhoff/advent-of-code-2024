@@ -1,13 +1,13 @@
 #include "prelude.h"
 
-#define DAY "14"
-#define INPUT DAY ".txt"
+#define DAY    "14"
+#define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
 #define MAX_BOTS 500
 
 static const i64 expected = 12;
-static int n, m;
+static int       n, m;
 
 typedef struct {
 	int x, y;
@@ -18,7 +18,7 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	R rs[MAX_BOTS];
+	R     rs[MAX_BOTS];
 	usize nr = 0;
 	for_each_line(data, line) {
 		R r;
@@ -29,21 +29,21 @@ i64 solve(char *data) {
 	}
 
 	int qs[4][2][2] = {
-		{{0, n / 2},     {0, m / 2}    }, // Left-top
-		{{n / 2 + 1, n}, {0, m / 2}    }, // Right-top
-		{{0, n / 2},     {m / 2 + 1, m}}, // Left-bottom
+		{    {0, n / 2},     {0, m / 2}}, // Left-top
+		{{n / 2 + 1, n},     {0, m / 2}}, // Right-top
+		{    {0, n / 2}, {m / 2 + 1, m}}, // Left-bottom
 		{{n / 2 + 1, n}, {m / 2 + 1, m}}, // Right-bottom
 	};
 
 	int counts[4] = {0};
 
 	for (usize i = 0; i < nr; i++) {
-		R *r = &rs[i];
-		r->x += n + (r->dx * 100) % n;
-		r->y += m + (r->dy * 100) % m;
-		r->x %= n;
-		r->y %= m;
-		int q = -1;
+		R *r   = &rs[i];
+		r->x  += n + (r->dx * 100) % n;
+		r->y  += m + (r->dy * 100) % m;
+		r->x  %= n;
+		r->y  %= m;
+		int q  = -1;
 		for (usize j = 0; q == -1 && j < 4; j++) {
 			if (r->x >= qs[j][0][0] && r->x < qs[j][0][1] &&
 			    r->y >= qs[j][1][0] && r->y < qs[j][1][1]) {
