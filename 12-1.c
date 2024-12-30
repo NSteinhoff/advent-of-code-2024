@@ -60,7 +60,7 @@ static void fill(R *r, P p, usize d) {
 	MARK(p);
 	assert(r->np < MAX_POS);
 	r->ps[r->np++] = p;
-	for (usize d = 0; d < ASZ(dirs); d++) fill(r, step(p, d), d);
+	for (usize d = 0; d < CAP(dirs); d++) fill(r, step(p, d), d);
 }
 
 i64 solve(char *data) {

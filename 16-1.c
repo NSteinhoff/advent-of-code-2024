@@ -126,7 +126,7 @@ static void heapify_down(Q *q, usize i) {
 }
 
 static void push(Q *q, L loc) {
-	assert(q->len < ASZ(q->elems) && "Queue full!");
+	assert(q->len < CAP(q->elems) && "Queue full!");
 	usize i     = q->len++;
 	q->elems[i] = loc;
 	heapify_up(q, i);

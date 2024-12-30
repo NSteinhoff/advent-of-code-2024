@@ -51,7 +51,7 @@ i64 solve(char *data) {
 		if (xx < 0 || yy < 0 || (usize)xx >= len || (usize)yy >= len)
 			break;
 		if (map[yy][xx] == '#') {
-			d = (d + 1) % ASZ(ds);
+			d = (d + 1) % CAP(ds);
 		} else {
 			gy = yy;
 			gx = xx;

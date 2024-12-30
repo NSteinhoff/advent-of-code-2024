@@ -5,16 +5,16 @@
 #define INPUT  DAY ".txt"
 #define SAMPLE DAY "-s.txt"
 
+#define MAX_CODES      8
 #define MAX_BUTTONS    (3 * 4)
 #define MAX_MOVES_DIR  (6 * 5)
 #define MAX_MOVES_NUM  (12 * 11)
 #define MAX_MOVE_WAYS  12
 #define MAX_MOVE_STEPS 12
 #define MAX_QUEUE      (1 << 9)
-#define MAX_SEQ        256
-#define MAX_SEQS       (1 << 21)
+#define MAX_CACHE      (1 << 9)
 
-static const i64 expected = 126384;
+static const i64 expected = 154115708116294;
 
 typedef struct {
 	int x, y;
@@ -42,22 +42,18 @@ typedef struct {
 	usize count;
 } MoveSet;
 
-typedef struct {
-	char *data;
-	usize len;
-	usize cap;
-} Seq;
-
-typedef struct {
-	char  data[MAX_SEQS][MAX_SEQ];
-	usize count;
-	usize best;
-} Seqs;
-
 static Move  dirpad_moves[MAX_MOVES_DIR];
 static usize dirpad_moves_count;
 static Move  numpad_moves[MAX_MOVES_NUM];
 static usize numpad_moves_count;
+
+typedef struct {
+	char  from, to;
+	usize depth;
+	usize len;
+} CacheEntry;
+static CacheEntry cache[MAX_CACHE];
+static usize      cache_count = 0;
 
 // clang-format off
 static const char *const numpad[] = {
@@ -115,7 +111,7 @@ compute_moves(const char *const pad[], usize cap, Move moves[cap]) {
 		}
 	}
 
-	// Create a list of moves from each button to all other buttons,
+	// Create a list of moves from each button to all other buttons
 	// i.e. Cartensian Product with itself.
 	usize len = 0;
 	for (usize i = 0; i < num_buttons; i++) {
@@ -178,77 +174,71 @@ static Move *find_move(char from, char to, const MoveSet *moveset) {
 	UNREACHABLE("Cannot find move!");
 }
 
-static Seq extended(Seq seq, const char *steps) {
-	usize new_len = seq.len + strlen(steps);
-	assert(new_len < MAX_SEQ - 1);
-	strcpy(&seq.data[seq.len], steps);
-	seq.len = new_len;
-	return seq;
-}
-
-static void collect(Seqs *seqs, const char *seq) {
-	assert(seqs->count < MAX_SEQS);
-	usize len = strlen(seq);
-	assert(len < MAX_SEQ);
-	strcpy(seqs->data[seqs->count++], seq);
-	if (!seqs->best || len < seqs->best) seqs->best = len;
-}
-
-static void collect_sequences(
-	char from, const char *input, MoveSet *moveset, Seq seq, Seqs *seqs) {
-
-	if (input[0] == '\0') {
-		collect(seqs, seq.data);
-		return;
+static usize get_length(char from, char to, usize depth, usize max_depth) {
+	// Check for cached result
+	for (usize i = 0; i < cache_count; i++) {
+		if (cache[i].from == from && cache[i].to == to
+		    && cache[i].depth == depth)
+			return cache[i].len;
 	}
 
-	char  to = input[0];
-	Move *m  = find_move(from, to, moveset);
-	for (usize k = 0; k < m->num_ways; k++) {
-		collect_sequences(
-			to, input + 1, moveset, extended(seq, m->ways[k]),
-			seqs);
-	}
-}
+	// Grab the keypad moveset based on the depth
+	const MoveSet moveset =
+		depth == 0 ? (MoveSet){numpad_moves, numpad_moves_count}
+			   : (MoveSet){dirpad_moves, dirpad_moves_count};
 
-static int sequence_length(const char *code) {
-	char seq_data[MAX_SEQ] = {0};
-	Seq  seq = {.data = seq_data, .len = 0, .cap = sizeof seq_data};
+	// Get the pre-computed move data
+	const Move *m = find_move(from, to, &moveset);
 
-	static Seqs input;
-	static Seqs output;
-	input.count  = 0;
-	output.count = 0;
-
-	MoveSet movesets[] = {
-		['n'] = {numpad_moves, numpad_moves_count},
-		['d'] = {dirpad_moves, dirpad_moves_count},
-	};
-
-	collect(&input, code);
-
-	const uchar types[] = {'n', 'd', 'd', '\0'};
-	for (const uchar *t = types; *t; t++) {
-		output.count = output.best = 0;
-		for (usize i = 0; i < input.count; i++) {
-			collect_sequences(
-				'A', input.data[i], &movesets[*t], seq,
-				&output);
-		}
-
-		if (t[1] == '\0') {
-			printf("  %s: %8zu ways\n", code, output.count);
-			return (int)output.best;
-		}
-
-		input.count = 0;
-		for (usize i = 0; i < output.count; i++) {
-			if (strlen(output.data[i]) == output.best) {
-				collect(&input, output.data[i]);
+	usize best = SIZE_MAX;
+	for (usize i = 0; i < m->num_ways; i++) {
+		const char *way = m->ways[i];
+		usize       len = 0;
+		if (depth == max_depth) {
+			// When we are at max depth, the length in simply the
+			// number of steps
+			len = strlen(way);
+		} else {
+			// When we are not at max depth, then we have to
+			// recursively expand the move and collect the best
+			// length at each level
+			char from = 'A';
+			for (usize j = 0; j < strlen(way); j++) {
+				char to  = way[j];
+				len     += get_length(
+                                        from, to, depth + 1, max_depth);
+				from = to;
 			}
 		}
+		assert(len);
+		if (len < best) best = len;
 	}
-	UNREACHABLE("Should return early!");
+
+	assert(cache_count < MAX_CACHE);
+	cache[cache_count++] = (CacheEntry){
+		.to    = to,
+		.from  = from,
+		.depth = depth,
+		.len   = best,
+	};
+
+	return best;
+}
+
+static u64 sequence_length(const char *code) {
+	usize n_robots = 25;
+
+	u64  len  = 0;
+	char from = 'A';
+	for (usize i = 0; i < strlen(code); i++) {
+		char to = code[i];
+
+		len += get_length(from, to, 0, n_robots);
+
+		from = to;
+	}
+
+	return len;
 }
 
 i64 solve(char *data) {
@@ -256,10 +246,10 @@ i64 solve(char *data) {
 	i64 result = 0;
 
 	for_each_line(data, code) {
-		int length = sequence_length(code);
-		int numval = atoi(code);
-		int complx = length * numval;
-		printf("  %s: %d\n", code, length);
+		u64 length = sequence_length(code);
+		u64 numval = (u64)atoi(code);
+		u64 complx = length * numval;
+		printf("  %s: %llu\n", code, length);
 
 		result += complx;
 	}

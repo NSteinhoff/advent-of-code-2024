@@ -50,7 +50,7 @@ i64 solve(char *data) {
 			if (data[ATS(x, y, n)] != 'X') continue;
 
 			// Run search in all 8 directions
-			for (usize i = 0; i < ASZ(directions); i++) {
+			for (usize i = 0; i < CAP(directions); i++) {
 				if (search(data, x, y, n, &directions[i]))
 					result++;
 			}

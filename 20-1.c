@@ -55,7 +55,7 @@ i64 solve(char *data) {
 			{p.x - 1,     p.y},
 		};
 
-		for (usize j = 0; j < ASZ(adj); j++) {
+		for (usize j = 0; j < CAP(adj); j++) {
 			P pp = adj[j];
 			if (pp.x < 0 || pp.x >= G.n || pp.y < 0 || pp.y >= G.m)
 				continue;
@@ -81,7 +81,7 @@ i64 solve(char *data) {
                                 {x - 1, y - 1},
 			};
 
-			for (usize j = 0; j < ASZ(cheats); j++) {
+			for (usize j = 0; j < CAP(cheats); j++) {
 				P pp = cheats[j];
 				if (pp.x < 0 || pp.x >= G.n || pp.y < 0 ||
 				    pp.y >= G.m)

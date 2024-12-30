@@ -41,7 +41,7 @@ i64 solve(char *data) {
 
 			// Run search in the 4 diagonals
 			usize num = 0;
-			for (usize i = 0; i < ASZ(directions); i++) {
+			for (usize i = 0; i < CAP(directions); i++) {
 				if (search(data, x, y, n, &directions[i]))
 					num++;
 			}

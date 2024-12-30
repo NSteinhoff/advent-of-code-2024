@@ -13,8 +13,8 @@
 #include <ctype.h>
 #include <string.h>
 
-// Array size
-#define ASZ(A) (sizeof(A) / sizeof(A[0]))
+// Array capacity
+#define CAP(A) (sizeof(A) / sizeof(A[0]))
 
 // 2-d array access
 #define AT(X, Y, W)  ((Y) * (W) + (X))
@@ -42,6 +42,8 @@ typedef float    f32;
 typedef double   f64;
 // clang-format on
 
+#define UNREACHABLE(MSG) assert(false && MSG)
+
 // __LINE__ does not get recursively expanded when part of stringizing # or
 // token-pasting ##, so we have to add indirection
 #define CONCAT_(prefix, suffix) prefix##suffix
@@ -59,7 +61,7 @@ typedef double   f64;
 #define for_each_line(S, L) for_each_token(S, L, "\n")
 #define for_each_word(S, W) for_each_token(S, W, " ")
 
-#define for_in(I, A) for (usize I = 0; I < ASZ(A); I++)
+#define for_in(I, A) for (usize I = 0; I < CAP(A); I++)
 #define for_rg(I, N) for (usize I = 0; I < N; I++)
 
 i64 solve(char *data);
@@ -132,23 +134,39 @@ char *strsplit(char **s, const char *sep) {
 }
 
 typedef struct {
-	usize s, e, size, len;
+	usize cap, len;
+} Stack;
+
+typedef struct {
+	usize s, e, cap, len;
 } Queue;
+
+usize spush(Stack *s);
+usize spush(Stack *s) {
+	assert(s->len < s->cap && "Stack full!");
+	return s->len++;
+}
+
+usize spop(Stack *s);
+usize spop(Stack *s) {
+	assert(s->len && "Stack empty!");
+	return --s->len;
+}
 
 usize qpush(Queue *q);
 usize qpush(Queue *q) {
-	assert(q->len < q->size);
+	assert(q->len < q->cap && "Queue full!");
 	usize i = q->e;
-	q->e = q->e < q->size - 1 ? q->e + 1 : 0;
+	q->e = q->e < q->cap - 1 ? q->e + 1 : 0;
 	q->len++;
 	return i;
 }
 
 usize qpop(Queue *q);
 usize qpop(Queue *q) {
-	assert(q->len > 0);
+	assert(q->len > 0 && "Queue empty!");
 	usize i = q->s;
-	q->s = q->s < q->size - 1 ? q->s + 1 : 0;
+	q->s = q->s < q->cap - 1 ? q->s + 1 : 0;
 	q->len--;
 	return i;
 }

@@ -34,7 +34,7 @@ i64 solve(char *data) {
 		if (++n >= num_bytes) break;
 	}
 
-	Q q = {.size = MAX_Q};
+	Q q = {.cap = MAX_Q};
 	P ps[MAX_Q];
 
 	ps[qpush(&q)] = (P){0};

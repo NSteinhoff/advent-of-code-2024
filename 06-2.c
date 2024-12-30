@@ -19,7 +19,7 @@ struct {
 
 enum {
 	EMPTY   = 0,
-	BLOCKED = 1 << ASZ(steps),
+	BLOCKED = 1 << CAP(steps),
 	VISITED = BLOCKED << 1,
 };
 
@@ -41,7 +41,7 @@ enum {
 #define MARK(x, d)      (x |= (1 << d))
 #define IS_MARKED(x, d) (x & (1 << d))
 
-#define TURN(s)          ((s) = (s + 1) % ASZ(steps))
+#define TURN(s)          ((s) = (s + 1) % CAP(steps))
 #define IS_OUTSIDE(x, y) (x < 0 || y < 0 || (usize)x >= n || (usize)y >= n)
 
 static u8    map_start[N][N];

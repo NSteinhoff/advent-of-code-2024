@@ -45,7 +45,7 @@ static uint count(P p, const int dists[M][N]) {
                                 {p.x - dx, p.y + dy},
                                 {p.x - dx, p.y - dy},
                         };
-			for (usize i = 0; i < ASZ(cheats); i++) {
+			for (usize i = 0; i < CAP(cheats); i++) {
 				P pp = cheats[i];
 				if (outside(pp)) continue;
 				if (dists[pp.y][pp.x] == -1) continue;
@@ -93,7 +93,7 @@ i64 solve(char *data) {
 			{p.x - 1,     p.y},
 		};
 
-		for (usize j = 0; j < ASZ(adj); j++) {
+		for (usize j = 0; j < CAP(adj); j++) {
 			P pp = adj[j];
 			if (outside(pp)) continue;
 			if (blocked[pp.y][pp.x]) continue;

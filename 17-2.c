@@ -30,7 +30,7 @@ i64 solve(char *data) {
 	const u8 program[] = {
 		2, 4, 1, 1, 7, 5, 1, 5, 4, 0, 5, 5, 0, 3, 3, 0,
 	};
-	i64 result = (i64)find(ASZ(program), program, 0);
+	i64 result = (i64)find(CAP(program), program, 0);
 	return result;
 }
 

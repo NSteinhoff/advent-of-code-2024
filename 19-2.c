@@ -23,7 +23,7 @@ static const char *cache_keys[MAX_CACHE];
 static usize cache_size = 0;
 static usize cache_hits = 0;
 
-static HashMap h = {.keys = cache_keys, .size = ASZ(cache_keys)};
+static HashMap h = {.keys = cache_keys, .size = CAP(cache_keys)};
 
 static usize hash(const char *k) {
 	u32 h = 5381;

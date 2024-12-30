@@ -47,7 +47,7 @@ static struct {
 } G;
 
 static inline P step(P p, usize d) {
-	usize dd = d % ASZ(dirs);
+	usize dd = d % CAP(dirs);
 	return (P){.x = p.x + dirs[dd].x, .y = p.y + dirs[dd].y};
 }
 
@@ -65,7 +65,7 @@ static void fill(R *r, P p, usize d) {
 	MARK(p);
 	assert(r->np < MAX_POS);
 	r->ps[r->np++] = p;
-	for (usize d = 0; d < ASZ(dirs); d++) fill(r, step(p, d), d);
+	for (usize d = 0; d < CAP(dirs); d++) fill(r, step(p, d), d);
 }
 
 i64 solve(char *data) {
