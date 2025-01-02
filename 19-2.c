@@ -14,8 +14,13 @@ static const i64 expected = 16;
 
 typedef struct {
 	const char **keys;
-	usize        size;
+	usize        cap;
 } HashMap;
+
+typedef struct {
+	usize idx;
+	bool  created;
+} Entry;
 
 static usize       cache_vals[MAX_CACHE];
 static const char *cache_keys[MAX_CACHE];
@@ -23,7 +28,7 @@ static const char *cache_keys[MAX_CACHE];
 static usize cache_size = 0;
 static usize cache_hits = 0;
 
-static HashMap h = {.keys = cache_keys, .size = CAP(cache_keys)};
+static HashMap h = {.keys = cache_keys, .cap = CAP(cache_keys)};
 
 static usize hash(const char *k) {
 	u32 h = 5381;
@@ -31,17 +36,20 @@ static usize hash(const char *k) {
 	return h;
 }
 
-static isize set(HashMap *h, const char *k) {
-	for (usize i = hash(k) % h->size; i < h->size; i++)
-		if (h->keys[i] == NULL || !strcmp(h->keys[i], k))
-			return (isize)i;
-	return -1;
-}
+static Entry lookup(HashMap *h, const char *k) {
+	usize start = hash(k) % h->cap;
 
-static isize get(HashMap *h, const char *k) {
-	for (usize i = hash(k) % h->size; i < h->size && h->keys[i]; i++)
-		if (!strcmp(h->keys[i], k)) return (isize)i;
-	return -1;
+	for (usize i = 0; i < h->cap; i++) {
+		usize idx = start + i;
+		if (h->keys[idx] == NULL)
+			return (Entry){
+				.idx     = idx,
+				.created = true,
+			};
+		if (!strcmp(h->keys[idx], k)) return (Entry){.idx = idx};
+	}
+
+	UNREACHABLE("Hash map full!");
 }
 
 static inline char *split(char *s, const char *sep) {
@@ -56,10 +64,10 @@ static inline char *split(char *s, const char *sep) {
 static usize count_ways(usize np, const char *ps[np], const char *d) {
 	if (!*d) return 1;
 
-	isize idx = get(&h, d);
-	if (idx != -1) {
+	Entry entry = lookup(&h, d);
+	if (!entry.created) {
 		cache_hits++;
-		return cache_vals[idx];
+		return cache_vals[entry.idx];
 	}
 
 	usize count = 0;
@@ -69,11 +77,9 @@ static usize count_ways(usize np, const char *ps[np], const char *d) {
 		if (!strncmp(d, p, len)) count += count_ways(np, ps, d + len);
 	}
 
-	idx = set(&h, d);
-	assert(idx != -1);
 	cache_size++;
-	cache_keys[idx] = d;
-	cache_vals[idx] = count;
+	cache_keys[entry.idx] = d;
+	cache_vals[entry.idx] = count;
 
 	return count;
 }
@@ -107,7 +113,8 @@ i64 solve(char *data) {
 	for (usize i = 0; i < nd; i++) count += count_ways(np, ps, ds[i]);
 	result = (i64)count;
 
-	printf("Cached: %zu\tHits: %zu\n", cache_size, cache_hits);
+	printf("Cached: %zu\tHits: %zu\tLoad Factor: %f\n", cache_size,
+	       cache_hits, (f64)cache_size / (f64)MAX_CACHE);
 
 	return result;
 }

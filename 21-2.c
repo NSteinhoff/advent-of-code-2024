@@ -175,7 +175,8 @@ static Move *find_move(char from, char to, const MoveSet *moveset) {
 }
 
 static usize get_length(char from, char to, usize depth, usize max_depth) {
-	// Check for cached result
+	// Check for cached result. We do a linear scan, because we only have
+	// ~500 entries in the cache. Using a hash table would be overkill.
 	for (usize i = 0; i < cache_count; i++) {
 		if (cache[i].from == from && cache[i].to == to
 		    && cache[i].depth == depth)
@@ -253,6 +254,7 @@ i64 solve(char *data) {
 
 		result += complx;
 	}
+	printf("Cached: %zu\n", cache_count);
 
 	return result;
 }
