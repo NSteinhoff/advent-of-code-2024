@@ -15,6 +15,7 @@ typedef struct {
 	i8    seqs[MAX_SEQS][4];
 	int   prices[MAX_SEQS];
 	usize count;
+	usize indices[MAX_SEQS];
 } Totals;
 
 typedef struct {
@@ -106,21 +107,21 @@ i64 solve(char *data) {
 			if (entry.created) {
 				keys[entry.idx] = totals.seqs[entry.idx];
 				memcpy(totals.seqs[entry.idx], seq, LEN);
-				totals.prices[entry.idx] = 0;
-				totals.count++;
+				totals.prices[entry.idx]       = 0;
+				totals.indices[totals.count++] = entry.idx;
 			}
 			totals.prices[entry.idx] += price;
 		}
 	}
 
 	printf("Total Seqs  : %zu\n", totals.count);
-	printf("Load Factor : %f\n", (f64)totals.count / (f64)hm.cap);
-	printf("AVG Probes  : %zu\n", hm.probes / hm.lookups);
+	printf("Load Factor : %.2f\n", (f64)totals.count / (f64)hm.cap);
+	printf("AVG Probes  : %.2f\n", (f64)hm.probes / (f64)hm.lookups);
 
 	int best = INT_MIN;
-	for (usize i = 0; i < hm.cap; i++) {
-		if (hm.keys[i] == NULL) continue;
-		if (totals.prices[i] > best) best = totals.prices[i];
+	for (usize i = 0; i < totals.count; i++) {
+		usize idx = totals.indices[i];
+		if (totals.prices[idx] > best) best = totals.prices[idx];
 	}
 
 	return best;
