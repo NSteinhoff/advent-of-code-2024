@@ -36,7 +36,7 @@ i64 solve(char *data) {
 	Stone stones[N];
 	usize n = 0;
 
-	for_each_token(data, t, " \n") {
+	foreach_token (data, t, " \n") {
 		assert(n < N);
 		usize num = (usize)atoll(t);
 		stones[n] = (Stone){.num = num, .iter = ITER};

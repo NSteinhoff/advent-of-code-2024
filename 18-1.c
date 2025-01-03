@@ -49,10 +49,10 @@ i64 solve(char *data) {
 		}
 
 		P adj[4] = {
-			{    p.x, p.y - 1, p.s + 1},
-			{p.x + 1,     p.y, p.s + 1},
-			{    p.x, p.y + 1, p.s + 1},
-			{p.x - 1,     p.y, p.s + 1},
+			{p.x,     p.y - 1, p.s + 1},
+			{p.x + 1, p.y,     p.s + 1},
+			{p.x,     p.y + 1, p.s + 1},
+			{p.x - 1, p.y,     p.s + 1},
 		};
 		for (usize j = 0; j < 4; j++) {
 			P pp = adj[j];

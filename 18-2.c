@@ -56,10 +56,10 @@ static bool connected(usize len, int drops[len][2], usize n) {
 		visited[p.y][p.x] = true;
 
 		P adj[4] = {
-			{    p.x, p.y - 1},
-			{p.x + 1,     p.y},
-			{    p.x, p.y + 1},
-			{p.x - 1,     p.y},
+			{p.x,     p.y - 1},
+			{p.x + 1, p.y    },
+			{p.x,     p.y + 1},
+			{p.x - 1, p.y    },
 		};
 		for (usize j = 0; j < 4; j++) {
 			P pp = adj[j];

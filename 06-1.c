@@ -13,15 +13,16 @@ static char map[N][N];
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
+
 	memset(map, 0, sizeof map);
-	usize len = strcspn(data, "\n");
-	printf("Map: %zu x %zu\n", len, len);
+	usize n = strcspn(data, "\n");
+	printf("Map: %zu x %zu\n", n, n);
 
 	int   gx = 0;
 	int   gy = 0;
 	usize y  = 0;
-	for_each_line(data, line) {
-		for (usize x = 0; x < len; x++) {
+	foreach_line (data, line) {
+		for (usize x = 0; x < n; x++) {
 			char c = line[x];
 			if (c == '^') {
 				gx        = (int)x;
@@ -34,32 +35,31 @@ i64 solve(char *data) {
 		y++;
 	}
 
-	struct {
-		int x, y;
-	} ds[4] = {
+	// clang-format off
+	struct {int x, y;} dirs[4] = {
 		{ 0, -1}, // N
 		{ 1,  0}, // E
 		{ 0,  1}, // S
 		{-1,  0}, // W
 	};
+	// clang-format on
 
 	uchar d = 0;
 	while (true) {
 		map[gy][gx] = 'X';
-		int xx      = gx + ds[d].x;
-		int yy      = gy + ds[d].y;
-		if (xx < 0 || yy < 0 || (usize)xx >= len || (usize)yy >= len)
-			break;
+		int xx      = gx + dirs[d].x;
+		int yy      = gy + dirs[d].y;
+		if (xx < 0 || yy < 0 || (usize)xx >= n || (usize)yy >= n) break;
 		if (map[yy][xx] == '#') {
-			d = (d + 1) % CAP(ds);
+			d = (d + 1) % CAP(dirs);
 		} else {
 			gy = yy;
 			gx = xx;
 		}
 	}
 
-	for (usize x = 0; x < len; x++)
-		for (usize y = 0; y < len; y++)
+	for (usize x = 0; x < n; x++)
+		for (usize y = 0; y < n; y++)
 			if (map[y][x] == 'X') result++;
 
 	return result;

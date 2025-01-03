@@ -15,12 +15,14 @@ typedef struct {
 
 #define HEIGHT(x, y) (data[ATS((x), (y), nrows)])
 
+// clang-format off
 Pos dirs[] = {
-	{ .x = 1,  .y = 0},
-	{.x = -1,  .y = 0},
-	{ .x = 0,  .y = 1},
-	{ .x = 0, .y = -1},
+	{.x =  1,  .y =  0},
+	{.x = -1,  .y =  0},
+	{.x =  0,  .y =  1},
+	{.x =  0,  .y = -1},
 };
+// clang-format on
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
@@ -62,8 +64,8 @@ i64 solve(char *data) {
 				int x = p.x + dirs[j].x;
 				int y = p.y + dirs[j].y;
 
-				if (x < 0 || y < 0 || x >= ncols ||
-				    y >= nrows || HEIGHT(x, y) - height != 1) {
+				if (x < 0 || y < 0 || x >= ncols || y >= nrows
+				    || HEIGHT(x, y) - height != 1) {
 					continue;
 				}
 

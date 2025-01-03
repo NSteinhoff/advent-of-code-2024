@@ -87,10 +87,10 @@ i64 solve(char *data) {
 	dists[p.y][p.x] = 0;
 	while (p.x != G.e.x || p.y != G.e.y) {
 		P adj[] = {
-			{    p.x, p.y - 1},
-			{p.x + 1,     p.y},
-			{    p.x, p.y + 1},
-			{p.x - 1,     p.y},
+			{p.x,     p.y - 1},
+			{p.x + 1, p.y    },
+			{p.x,     p.y + 1},
+			{p.x - 1, p.y    },
 		};
 
 		for (usize j = 0; j < CAP(adj); j++) {

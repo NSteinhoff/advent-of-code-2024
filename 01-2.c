@@ -16,18 +16,18 @@ static int compar(const void *x, const void *y) {
 }
 
 i64 solve(char *data) {
-	int   a[N], b[N];
+	int   xs[N], ys[N];
 	usize n = 0;
 
-	for_each_line(data, line) {
-		int cnt = sscanf(line, "%d %d", &a[n], &b[n]);
+	foreach_line (data, line) {
+		int cnt = sscanf(line, "%d %d", &xs[n], &ys[n]);
 		assert(cnt == 2 && "Expect two fields");
 		n++;
 	}
 	printf("N: %zu\n", n);
 
-	qsort(a, n, sizeof *a, compar);
-	qsort(b, n, sizeof *b, compar);
+	qsort(xs, n, sizeof *xs, compar);
+	qsort(ys, n, sizeof *ys, compar);
 
 	int   total = 0;
 	usize j     = 0;
@@ -35,10 +35,10 @@ i64 solve(char *data) {
 		int na = 1;
 		int nb = 0;
 		// clang-format off
-		for (; j     < n && a[i]     >  b[j]; j++) /**/;  // find match
-		for (; j     < n && a[i]     == b[j]; j++) nb++;  // count matches
-		for (; i + 1 < n && a[i + 1] == a[i]; i++) na++;  // count instances
-		total += a[i] * nb * na;
+		for (; j     < n && xs[i]     >  ys[j]; j++) /**/;  // find match
+		for (; j     < n && xs[i]     == ys[j]; j++) nb++;  // count matches
+		for (; i + 1 < n && xs[i + 1] == xs[i]; i++) na++;  // count instances
+		total += xs[i] * nb * na;
 		// clang-format on
 	}
 

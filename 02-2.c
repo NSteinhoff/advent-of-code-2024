@@ -32,17 +32,16 @@ static bool safeskip(usize size, int xs[size], usize skip) {
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
-	for_each_line(data, line) {
-		printf("%s ", line);
-		usize n                        = 0;
-		int   xs[MAX_VALUES]           = {0};
-		for_each_word(line, v) xs[n++] = atoi(v);
-		bool is_safe                   = safe(n, xs);
+
+	foreach_line (data, line) {
+		usize n              = 0;
+		int   xs[MAX_VALUES] = {0};
+		foreach_word (line, v) xs[n++] = atoi(v);
+		bool is_safe = safe(n, xs);
 		for (usize i = 0; i < n && !is_safe; i++)
 			is_safe = safeskip(n, xs, i);
 
 		if (is_safe) result++;
-		printf("%s\n", is_safe ? "SAFE" : "UNSAFE");
 	}
 
 	return result;

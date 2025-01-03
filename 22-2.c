@@ -72,12 +72,12 @@ i64 solve(char *data) {
 	totals.count = 0;
 
 	static const i8 *keys[CAP(totals.prices)];
-	static HashMap   hm = {.keys = keys, .cap = CAP(keys)};
+	static HashMap   seqs_map = {.keys = keys, .cap = CAP(keys)};
 	memset(keys, 0, sizeof keys);
-	hm.probes  = 0;
-	hm.lookups = 0;
+	seqs_map.probes  = 0;
+	seqs_map.lookups = 0;
 
-	for_each_line(data, line) {
+	foreach_line (data, line) {
 		i64 number = (i64)atoi(line);
 		int price  = number % 10;
 		int prev   = price;
@@ -103,7 +103,7 @@ i64 solve(char *data) {
 			if (!entry.created) continue;
 			seen_keys[entry.idx] = seq;
 
-			entry = lookup(&hm, seq);
+			entry = lookup(&seqs_map, seq);
 			if (entry.created) {
 				keys[entry.idx] = totals.seqs[entry.idx];
 				memcpy(totals.seqs[entry.idx], seq, LEN);
@@ -115,8 +115,9 @@ i64 solve(char *data) {
 	}
 
 	printf("Total Seqs  : %zu\n", totals.count);
-	printf("Load Factor : %.2f\n", (f64)totals.count / (f64)hm.cap);
-	printf("AVG Probes  : %.2f\n", (f64)hm.probes / (f64)hm.lookups);
+	printf("Load Factor : %.2f\n", (f64)totals.count / (f64)seqs_map.cap);
+	printf("AVG Probes  : %.2f\n",
+	       (f64)seqs_map.probes / (f64)seqs_map.lookups);
 
 	int best = INT_MIN;
 	for (usize i = 0; i < totals.count; i++) {

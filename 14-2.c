@@ -20,7 +20,7 @@ i64 solve(char *data) {
 
 	R     rs[MAX_BOTS];
 	usize nr = 0;
-	for_each_line(data, line) {
+	foreach_line (data, line) {
 		R r;
 		sscanf(line, "p=%d,%d v=%d,%d", &r.x, &r.y, &r.dx, &r.dy);
 		assert(nr < MAX_BOTS);

@@ -10,15 +10,15 @@ static const i64 expected = 3749;
 static bool check(usize n, i64 *ops, i64 target, i64 total) {
 	if (!n) return total == target;
 
-	return check(n - 1, ops + 1, target, total + ops[0]) ||
-	       check(n - 1, ops + 1, target, total * ops[0]);
+	return check(n - 1, ops + 1, target, total + ops[0])
+	    || check(n - 1, ops + 1, target, total * ops[0]);
 }
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	for_each_line(data, line) {
+	foreach_line (data, line) {
 		char *brk;
 		char *value  = strtok_r(line, ": ", &brk);
 		i64   target = strtoll(value, NULL, 10);

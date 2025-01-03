@@ -49,10 +49,10 @@ i64 solve(char *data) {
 	dists[p.y][p.x] = 0;
 	while (p.x != G.e.x || p.y != G.e.y) {
 		P adj[] = {
-			{    p.x, p.y - 1},
-			{p.x + 1,     p.y},
-			{    p.x, p.y + 1},
-			{p.x - 1,     p.y},
+			{p.x,     p.y - 1},
+			{p.x + 1, p.y    },
+			{p.x,     p.y + 1},
+			{p.x - 1, p.y    },
 		};
 
 		for (usize j = 0; j < CAP(adj); j++) {
@@ -71,10 +71,10 @@ i64 solve(char *data) {
 			if (blocked[y][x]) continue;
 
 			P cheats[] = {
-				{    x, y - 2},
-                                {x + 2,     y},
-                                {    x, y + 2},
-				{x - 2,     y},
+				{x,     y - 2},
+                                {x + 2, y    },
+                                {x,     y + 2},
+				{x - 2, y    },
                                 {x + 1, y - 1},
                                 {x + 1, y + 1},
 				{x - 1, y + 1},
@@ -83,8 +83,8 @@ i64 solve(char *data) {
 
 			for (usize j = 0; j < CAP(cheats); j++) {
 				P pp = cheats[j];
-				if (pp.x < 0 || pp.x >= G.n || pp.y < 0 ||
-				    pp.y >= G.m)
+				if (pp.x < 0 || pp.x >= G.n || pp.y < 0
+				    || pp.y >= G.m)
 					continue;
 				if (blocked[pp.y][pp.x]) continue;
 				int saved = dists[y][x] - dists[pp.y][pp.x] - 2;

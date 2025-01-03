@@ -8,23 +8,24 @@ const i64 expected = 48;
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
-	i64   result  = 0;
-	usize n       = strlen(data);
-	bool  enabled = true;
+	i64 result = 0;
+
+	usize n  = strlen(data);
+	bool  on = true;
 	for (usize i = 0; i < n; i++) {
 		if (!strncmp(data + i, "do()", 4)) {
-			enabled = true;
+			on = true;
 			continue;
 		}
 		if (!strncmp(data + i, "don't()", 7)) {
-			enabled = false;
+			on = false;
 			continue;
 		}
 
-		if (!enabled) continue;
+		if (!on) continue;
 		if (strncmp(data + i, "mul(", 4)) continue;
+		usize ii = i + 4;
 
-		usize ii  = i + 4;
 		char *arg = data + ii;
 		for (; ii < n && isdigit(data[ii]); ii++);
 		if (data[ii] != ',') continue;

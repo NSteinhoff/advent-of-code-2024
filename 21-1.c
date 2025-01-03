@@ -255,7 +255,7 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	for_each_line(data, code) {
+	foreach_line (data, code) {
 		int length = sequence_length(code);
 		int numval = atoi(code);
 		int complx = length * numval;

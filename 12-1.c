@@ -13,50 +13,56 @@ static const i64 expected = 1930;
 // We can reuse the input string to mark seen tiles by using the 8th bit as a
 // flag, because we know that [A-Z] is not using that bit.
 // clang-format off
-#define CHAR(p) (p.x < 0 || p.y < 0 || p.x >= G.n || p.y >= G.m ? 0 : (G.d[ATS(p.x, p.y, G.n)]  & (char)~0x80))
+#define CHAR(p) (p.x < 0 || p.y < 0 || p.x >= G.n || p.y >= G.m ? '\0' : (G.d[ATS(p.x, p.y, G.n)]  & (char)~0x80))
 #define SEEN(p) (G.d[ATS(p.x, p.y, G.n)]  & (char) 0x80)
 #define MARK(p) (G.d[ATS(p.x, p.y, G.n)] |= (char) 0x80)
 // clang-format on
 
+/// Position on the grid
 typedef struct {
 	int x, y;
-} P;
+} Pos;
 
+/// Fence tile
 typedef struct {
-	P     p;
+	Pos   p;
 	usize d;
-} F;
+} Fnc;
 
+/// Region with area covered and surrounding fence tiles
 typedef struct {
 	char  c;
 	usize np, nf;
-	P     ps[MAX_POS];
-	F     fs[MAX_FNC];
-} R;
+	Pos   ps[MAX_POS];
+	Fnc   fs[MAX_FNC];
+} Reg;
 
-static P dirs[4] = {
+// clang-format off
+static Pos dirs[4] = {
 	{ 0, -1}, // N
 	{ 1,  0}, // E
 	{ 0,  1}, // S
 	{-1,  0}, // W
 };
+// clang-format on
 
+/// Global grid
 static struct {
 	char *d;
 	int   n, m;
 } G;
 
-static inline P step(P p, usize d) {
-	return (P){.x = p.x + dirs[d].x, .y = p.y + dirs[d].y};
+static inline Pos step(Pos p, usize d) {
+	return (Pos){.x = p.x + dirs[d].x, .y = p.y + dirs[d].y};
 }
 
-static void fill(R *r, P p, usize d) {
-	if (SEEN(p) && CHAR(p) == r->c) return;
+static void fill(Reg *r, Pos p, usize d) {
 	if (CHAR(p) != r->c) {
 		assert(r->nf < MAX_FNC);
-		r->fs[r->nf++] = (F){.p = p, .d = d};
+		r->fs[r->nf++] = (Fnc){.p = p, .d = d};
 		return;
 	}
+	if (SEEN(p)) return;
 	MARK(p);
 	assert(r->np < MAX_POS);
 	r->ps[r->np++] = p;
@@ -74,9 +80,9 @@ i64 solve(char *data) {
 
 	for (int y = 0; y < G.m; y++) {
 		for (int x = 0; x < G.n; x++) {
-			P p = {x, y};
+			Pos p = {.x = x, .y = y};
 			if (SEEN(p)) continue;
-			R r = {.c = CHAR(p)};
+			Reg r = {.c = CHAR(p)};
 			fill(&r, p, 0);
 			result += r.np * r.nf;
 		}

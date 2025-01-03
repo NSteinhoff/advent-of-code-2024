@@ -23,19 +23,23 @@ static bool search(const char *data, usize x, usize y, usize n, int (*dir)[2]) {
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
-	i64   result = 0;
-	usize n      = strcspn(data, "\n");
-	printf("%zu x %zu\n", n, n);
+	i64 result = 0;
 
+	usize n = strcspn(data, "\n");
+	usize m = strlen(data) / (n + 1);
+	printf("%zu x %zu\n", n, m);
+
+	// clang-format off
 	int directions[][2] = {
 		{ 1, -1},
 		{ 1,  1},
 		{-1,  1},
 		{-1, -1},
 	};
+	// clang-format on
 
 	// Find the 'A'
-	for (usize y = 1; y < n - 1; y++) {
+	for (usize y = 1; y < m - 1; y++) {
 		for (usize x = 1; x < n - 1; x++) {
 			if (data[ATS(x, y, n)] != 'A') continue;
 

@@ -20,7 +20,7 @@ i64 solve(char *data) {
 
 	R     rs[MAX_BOTS];
 	usize nr = 0;
-	for_each_line(data, line) {
+	foreach_line (data, line) {
 		R r;
 		sscanf(line, "p=%d,%d v=%d,%d", &r.x, &r.y, &r.dx, &r.dy);
 		printf("%2zu: [%d,%d] -> [%d,%d]\n", nr, r.x, r.y, r.dx, r.dy);
@@ -29,9 +29,9 @@ i64 solve(char *data) {
 	}
 
 	int qs[4][2][2] = {
-		{    {0, n / 2},     {0, m / 2}}, // Left-top
-		{{n / 2 + 1, n},     {0, m / 2}}, // Right-top
-		{    {0, n / 2}, {m / 2 + 1, m}}, // Left-bottom
+		{{0, n / 2},     {0, m / 2}    }, // Left-top
+		{{n / 2 + 1, n}, {0, m / 2}    }, // Right-top
+		{{0, n / 2},     {m / 2 + 1, m}}, // Left-bottom
 		{{n / 2 + 1, n}, {m / 2 + 1, m}}, // Right-bottom
 	};
 
@@ -45,8 +45,8 @@ i64 solve(char *data) {
 		r->y  %= m;
 		int q  = -1;
 		for (usize j = 0; q == -1 && j < 4; j++) {
-			if (r->x >= qs[j][0][0] && r->x < qs[j][0][1] &&
-			    r->y >= qs[j][1][0] && r->y < qs[j][1][1]) {
+			if (r->x >= qs[j][0][0] && r->x < qs[j][0][1]
+			    && r->y >= qs[j][1][0] && r->y < qs[j][1][1]) {
 				counts[j]++;
 				q = (int)j;
 			}

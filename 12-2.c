@@ -13,55 +13,60 @@ static const i64 expected = 1206;
 // We can reuse the input string to mark seen tiles by using the 8th bit as a
 // flag, because we know that [A-Z] is not using that bit.
 // clang-format off
-#define CHAR(p) (p.x < 0 || p.y < 0 || p.x >= G.n || p.y >= G.m ? 0 : (G.d[ATS(p.x, p.y, G.n)]  & (char)~0x80))
-#define SEEN(p) (G.d[ATS(p.x, p.y, G.n)]  & (char) 0x80)
+#define CHAR(p) (p.x < 0 || p.y < 0 || p.x >= G.n || p.y >= G.m ? '\0' : (G.d[ATS(p.x, p.y, G.n)]  & (char)~0x80))
+#define SEEN(p) (G.d[ATS(p.x, p.y, G.n)] &  (char) 0x80)
 #define MARK(p) (G.d[ATS(p.x, p.y, G.n)] |= (char) 0x80)
 // clang-format on
 
+/// Position on the grid
 typedef struct {
 	int x, y;
-} P;
+} Pos;
 
+/// Fence tile
 typedef struct {
-	P     p;
+	Pos   p;
 	usize d;
-} F;
+} Fnc;
 
+/// Region with area covered and surrounding fence tiles
 typedef struct {
 	char  c;
 	usize np, nf;
-	P     ps[MAX_POS];
-	F     fs[MAX_FNC];
-} R;
+	Pos   ps[MAX_POS];
+	Fnc   fs[MAX_FNC];
+} Reg;
 
-static P dirs[4] = {
+// clang-format off
+static Pos dirs[4] = {
 	{ 0, -1}, // N
 	{ 1,  0}, // E
 	{ 0,  1}, // S
 	{-1,  0}, // W
 };
+// clang-format on
 
 static struct {
 	char *d;
 	int   n, m;
 } G;
 
-static inline P step(P p, usize d) {
+static inline Pos step(Pos p, usize d) {
 	usize dd = d % CAP(dirs);
-	return (P){.x = p.x + dirs[dd].x, .y = p.y + dirs[dd].y};
+	return (Pos){.x = p.x + dirs[dd].x, .y = p.y + dirs[dd].y};
 }
 
-static inline bool eq(F lhs, F rhs) {
+static inline bool eq(Fnc lhs, Fnc rhs) {
 	return lhs.p.x == rhs.p.x && lhs.p.y == rhs.p.y && lhs.d == rhs.d;
 }
 
-static void fill(R *r, P p, usize d) {
-	if (SEEN(p) && CHAR(p) == r->c) return;
+static void fill(Reg *r, Pos p, usize d) {
 	if (CHAR(p) != r->c) {
 		assert(r->nf < MAX_FNC);
-		r->fs[r->nf++] = (F){.p = p, .d = d};
+		r->fs[r->nf++] = (Fnc){.p = p, .d = d};
 		return;
 	}
+	if (SEEN(p)) return;
 	MARK(p);
 	assert(r->np < MAX_POS);
 	r->ps[r->np++] = p;
@@ -79,23 +84,34 @@ i64 solve(char *data) {
 
 	for (int y = 0; y < G.m; y++) {
 		for (int x = 0; x < G.n; x++) {
-			P p = {x, y};
+			Pos p = {.x = x, .y = y};
 			if (SEEN(p)) continue;
-			R r = {.c = CHAR(p)};
+			Reg r = {.c = CHAR(p)};
 			fill(&r, p, 0);
 
-			usize ns = 0;
+			// Go around the fence clockwise and count the number of corners.
+			// A corner is a fence tile whose neighbor is not a fence tile.
+			//
+			//   AAAAAf |  move along the fence
+			//   AAAAAf |  and count the * corners
+			//   AAAAAf |
+			//   AAAAAf*v
+			//  gfffffg
+			//   *
+			//   <----
+			//
+			usize sides = 0;
 			for (usize i = 0; i < r.nf; i++) {
-				F    f = r.fs[i];
-				F    g = (F){.p = step(f.p, f.d + 1), .d = f.d};
+				Fnc  f = r.fs[i];
+				Fnc  g = {.p = step(f.p, f.d + 1), .d = f.d};
 				bool found = false;
 				for (usize j = 0; j < r.nf && !found; j++) {
 					if (eq(r.fs[j], g)) found = true;
 				}
-				if (!found) ns++;
+				if (!found) sides++;
 			}
 
-			result += r.np * ns;
+			result += r.np * sides;
 		}
 	}
 

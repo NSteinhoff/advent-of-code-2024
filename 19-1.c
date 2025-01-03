@@ -29,11 +29,11 @@ i64 solve(char *data) {
 	char *ps[MAX_PATTERNS], *ds[MAX_DESIGNS];
 	usize np = 0, nd = 0;
 
-	for_each_token(patterns, p, ", ") {
+	foreach_token (patterns, p, ", ") {
 		assert(np < MAX_PATTERNS);
 		ps[np++] = p;
 	}
-	for_each_token(designs, d, "\n") {
+	foreach_token (designs, d, "\n") {
 		assert(nd < MAX_DESIGNS);
 		ds[nd++] = d;
 	}

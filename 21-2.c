@@ -246,7 +246,7 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	for_each_line(data, code) {
+	foreach_line (data, code) {
 		u64 length = sequence_length(code);
 		u64 numval = (u64)atoi(code);
 		u64 complx = length * numval;

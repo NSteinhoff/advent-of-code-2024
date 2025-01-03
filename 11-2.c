@@ -43,8 +43,8 @@ static usize count(usize num, usize iter) {
 	if (len % 2 == 0) {
 		usize left, right;
 		split(num, len, &left, &right);
-		return cached(count, left, iter - 1) +
-		       cached(count, right, iter - 1);
+		return cached(count, left, iter - 1)
+		     + cached(count, right, iter - 1);
 	}
 
 	return cached(count, num * 2024, iter - 1);
@@ -54,7 +54,7 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	for_each_token(data, t, " \n") {
+	foreach_token (data, t, " \n") {
 		usize num  = (usize)atoll(t);
 		result    += count(num, ITER);
 	}

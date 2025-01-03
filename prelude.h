@@ -54,12 +54,12 @@ typedef double   f64;
 #define MANGLE(name) CONCAT(CONCAT(name##__, __LINE__), __)
 #define UNIQ(name)   MANGLE(name)
 
-#define for_each_token(S, T, SEP)                                                                  \
-	for (char *UNIQ(brk), *T = strtok_r((S), (SEP), &UNIQ(brk)); T;                            \
+#define foreach_token(S, T, SEP)                                               \
+	for (char *UNIQ(brk), *T = strtok_r((S), (SEP), &UNIQ(brk)); T;        \
 	     T = strtok_r(NULL, (SEP), &UNIQ(brk)))
 
-#define for_each_line(S, L) for_each_token(S, L, "\n")
-#define for_each_word(S, W) for_each_token(S, W, " ")
+#define foreach_line(S, L) foreach_token (S, L, "\n")
+#define foreach_word(S, W) foreach_token (S, W, " ")
 
 #define for_in(I, A) for (usize I = 0; I < CAP(A); I++)
 #define for_rg(I, N) for (usize I = 0; I < N; I++)
@@ -100,10 +100,13 @@ char *read_to_string(const char *restrict fname) {
 	usize bytes_read = fread(content, 1, bytes_to_read, file);
 	if (bytes_read != bytes_to_read) {
 		if (feof(file))
-			fprintf(stderr, "Expected to read %zu bytes, but read %zu\n", bytes_to_read,
-			        bytes_read);
+			fprintf(stderr,
+			        "Expected to read %zu bytes, but read %zu\n",
+			        bytes_to_read, bytes_read);
 
-		if (ferror(file)) fprintf(stderr, "Could not read all bytes from %s\n", fname);
+		if (ferror(file))
+			fprintf(stderr, "Could not read all bytes from %s\n",
+			        fname);
 
 		free(content);
 		return NULL;
@@ -128,7 +131,7 @@ char *strsplit(char **s, const char *sep) {
 		*s = strchr(*s, '\0');
 	} else {
 		w[0] = '\0';
-		*s = w + strlen(sep);
+		*s   = w + strlen(sep);
 	}
 	return ret;
 }
@@ -157,7 +160,7 @@ usize qpush(Queue *q);
 usize qpush(Queue *q) {
 	assert(q->len < q->cap && "Queue full!");
 	usize i = q->e;
-	q->e = q->e < q->cap - 1 ? q->e + 1 : 0;
+	q->e    = q->e < q->cap - 1 ? q->e + 1 : 0;
 	q->len++;
 	return i;
 }
@@ -166,7 +169,7 @@ usize qpop(Queue *q);
 usize qpop(Queue *q) {
 	assert(q->len > 0 && "Queue empty!");
 	usize i = q->s;
-	q->s = q->s < q->cap - 1 ? q->s + 1 : 0;
+	q->s    = q->s < q->cap - 1 ? q->s + 1 : 0;
 	q->len--;
 	return i;
 }

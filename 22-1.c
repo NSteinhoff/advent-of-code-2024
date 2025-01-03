@@ -22,7 +22,7 @@ i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	for_each_line(data, line) {
+	foreach_line (data, line) {
 		i64 number = (i64)atoi(line);
 		for (usize i = 0; i < 2000; i++) number = step(number);
 		result += number;

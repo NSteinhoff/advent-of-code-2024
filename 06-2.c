@@ -8,14 +8,14 @@ static const i64 expected = 6;
 
 #define N 130
 
-struct {
-	int x, y;
-} steps[4] = {
+// clang-format off
+struct {int x, y;} steps[4] = {
 	{ 0, -1}, // N
 	{ 1,  0}, // E
 	{ 0,  1}, // S
 	{-1,  0}, // W
 };
+// clang-format on
 
 enum {
 	EMPTY   = 0,
@@ -34,12 +34,14 @@ enum {
 //      | + --------------> ?
 //      + ----------------> ?
 
+// clang-format off
 #define VISIT(x)        (x |= VISITED)
-#define IS_VISITED(x)   (x & VISITED)
+#define IS_VISITED(x)   (x &  VISITED)
 #define BLOCK(x)        (x |= BLOCKED)
-#define IS_BLOCKED(x)   (x & BLOCKED)
+#define IS_BLOCKED(x)   (x &  BLOCKED)
 #define MARK(x, d)      (x |= (1 << d))
-#define IS_MARKED(x, d) (x & (1 << d))
+#define IS_MARKED(x, d) (x &  (1 << d))
+// clang-format on
 
 #define TURN(s)          ((s) = (s + 1) % CAP(steps))
 #define IS_OUTSIDE(x, y) (x < 0 || y < 0 || (usize)x >= n || (usize)y >= n)
@@ -98,7 +100,7 @@ i64 solve(char *data) {
 	int   y_start = -1;
 
 	usize y = 0;
-	for_each_line(data, line) {
+	foreach_line (data, line) {
 		for (usize x = 0; x < n; x++) {
 			char c = line[x];
 			if (c == '^') {
