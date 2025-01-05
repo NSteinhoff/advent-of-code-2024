@@ -1,5 +1,7 @@
 # Debugging
 *.dSYM/
+.ropeproject
+.mypy_cache
 
 # Binaries
 create-new-day
