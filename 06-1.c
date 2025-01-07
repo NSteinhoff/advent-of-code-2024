@@ -6,61 +6,65 @@
 
 static const i64 expected = 41;
 
-#define N 130
+/// Access character in input data by x,y coordinates
+#define CHAR_AT(x, y) (data[y * (w + 1) + x])
 
-static char map[N][N];
+enum { N, E, S, W, NUM_DIRS };
+
+typedef struct {
+	int x, y;
+} P;
 
 i64 solve(char *data) {
 	assert(data && "We need data!");
 	i64 result = 0;
 
-	memset(map, 0, sizeof map);
-	usize n = strcspn(data, "\n");
-	printf("Map: %zu x %zu\n", n, n);
+	/// Width
+	int w = (int)strcspn(data, "\n");
+	/// Height
+	int h = (int)strlen(data) / (w + 1);
 
-	int   gx = 0;
-	int   gy = 0;
-	usize y  = 0;
-	foreach_line (data, line) {
-		for (usize x = 0; x < n; x++) {
-			char c = line[x];
-			if (c == '^') {
-				gx        = (int)x;
-				gy        = (int)y;
-				map[y][x] = 'X';
-			} else {
-				map[y][x] = c;
+	assert(h == w && "Square grid expected!");
+	printf("Map: %d x %d\n", h, w);
+
+	/// Guard
+	P g = {0};
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+			if (CHAR_AT(x, y) == '^') {
+				g = (P){x, y};
+				break;
 			}
 		}
-		y++;
 	}
 
-	// clang-format off
-	struct {int x, y;} dirs[4] = {
-		{ 0, -1}, // N
-		{ 1,  0}, // E
-		{ 0,  1}, // S
-		{-1,  0}, // W
-	};
-	// clang-format on
-
-	uchar d = 0;
+	/// Facing direction
+	uchar d = N;
 	while (true) {
-		map[gy][gx] = 'X';
-		int xx      = gx + dirs[d].x;
-		int yy      = gy + dirs[d].y;
-		if (xx < 0 || yy < 0 || (usize)xx >= n || (usize)yy >= n) break;
-		if (map[yy][xx] == '#') {
-			d = (d + 1) % CAP(dirs);
+		CHAR_AT(g.x,
+		        g.y) = 'X'; // Mark traveled
+
+		/// Target position after stepping in current direction
+		P gg = (P[]){
+			[N] = {g.x,     g.y - 1},
+			[E] = {g.x + 1, g.y    },
+			[S] = {g.x,     g.y + 1},
+			[W] = {g.x - 1, g.y    },
+		}[d];
+
+		if (gg.x < 0 || gg.y < 0 || gg.x >= w || gg.y >= h) {
+			break; // Left map
+		}
+
+		if (CHAR_AT(gg.x, gg.y) == '#') {
+			d = (d + 1) % NUM_DIRS; // Turn clockwise
 		} else {
-			gy = yy;
-			gx = xx;
+			g = gg; // Step forward
 		}
 	}
 
-	for (usize x = 0; x < n; x++)
-		for (usize y = 0; y < n; y++)
-			if (map[y][x] == 'X') result++;
+	for (char *p = data; *p; p++)
+		if (*p == 'X') result++;
 
 	return result;
 }

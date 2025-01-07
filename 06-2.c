@@ -25,10 +25,10 @@ enum {
 
 // Bitmask:
 //     [8,7,6,5,4,3,2,1] -> EMPTY
-//      ^ ^ ^ ^ ^ ^ ^ ^ --> N
-//      | | | | | | + ----> E
-//      | | | | | + ------> S
-//      | | | | + --------> W
+//      ^ ^ ^ ^ ^ ^ ^ ^ --> N  |
+//      | | | | | | + ----> E  |  Directions that we have already
+//      | | | | | + ------> S  |  visited this tile from.
+//      | | | | + --------> W  |
 //      | | | + ----------> BLOCKED
 //      | | + ------------> VISITED
 //      | + --------------> ?
@@ -113,6 +113,7 @@ i64 solve(char *data) {
 		y++;
 	}
 
+	// Walk the unobstructed map to find out where to place blocks
 	visit(map_start, d, x_start, y_start);
 
 	for (usize x = 0; x < n; x++) {
