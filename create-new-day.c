@@ -29,7 +29,10 @@ int main(int argc, char *argv[argc]) {
 	printf("Creating: %s\n", fname);
 
 	FILE *fp = fopen(fname, "w");
-	if (!fp) perror("open target file");
+	if (!fp) {
+		perror("open target file");
+		return 1;
+	}
 
 	const char *sep    = "{{DAY}}";
 	usize       seplen = strlen(sep);

@@ -48,7 +48,7 @@ lua_%: %.lua
 	@lua $<
 
 c_%: %.c
-	@$(CC) $(CFLAGS) $< -o $*
+	@$(COMPILE.c) $< -o $*
 	@./$*; rm -rf ./$* ./$*.dSYM
 
 rs_%: ./rs/src/bin/%.rs
@@ -61,7 +61,7 @@ ts_%: %.ts
 	@ts-node $<
 
 %: %.c
-	@$(CC) $(CFLAGS) $< -o $@
+	@$(COMPILE.c) $< -o $@
 
 create-new-day: create-new-day.c
-	@$(CC) $(CFLAGS) $< -o $@
+	@$(COMPILE.c) $< -o $@
